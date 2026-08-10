@@ -1,0 +1,17 @@
+{
+  "ads": {
+    "masterEnabled": true,
+    "slots": {
+      "header-ad": true,
+      "sidebar-ad": true,
+      "content-ad": true,
+      "footer-ad": true
+    }
+  },
+  "announcementBar": {
+    "enabled": false,
+    "text": "Welcome to AnimeCharactersList!",
+    "linkText": "",
+    "linkHref": ""
+  }
+}

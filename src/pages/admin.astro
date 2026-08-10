@@ -6,6 +6,7 @@ import lists from '../data/lists.json';
 import blogPosts from '../data/blog-posts.json';
 import quizzes from '../data/quizzes.json';
 import comparisons from '../data/comparisons.json';
+import settings from '../data/settings.json';
 
 // Build a unified initial state to pass to the client
 const initialDbData = {
@@ -14,7 +15,8 @@ const initialDbData = {
   lists,
   blogs: blogPosts,
   quizzes,
-  comparisons
+  comparisons,
+  settings
 };
 ---
 
@@ -43,19 +45,30 @@ const initialDbData = {
           quizzes: [...rawData.quizzes],
           comparisons: [...rawData.comparisons]
         },
+        // Settings is a single object, not a list, so it's kept separate
+        // from the records/dbType pattern used for the other tables.
+        settings: JSON.parse(JSON.stringify(rawData.settings)),
+        settingsExportJson: '',
         selectedRecord: null,
         editingIndex: -1,
         exportJson: '',
         
         init() {
           this.exportDatabase();
+          this.exportSettings();
         },
         
         login() {
-          if (this.password === 'admin123') {
+          // IMPORTANT: this check runs entirely in the browser, so anyone
+          // can read it in "View Source" or bypass it via DevTools no
+          // matter what the password is. This is just a soft gate to stop
+          // casual clicks. Real protection comes from putting Cloudflare
+          // Access in front of /admin at the edge (free, dashboard-only
+          // setup — see the note in the README).
+          if (this.password === 'CHANGE_ME_BEFORE_LAUNCH') {
             this.isAuthenticated = true;
           } else {
-            alert('Incorrect password! Try admin123');
+            alert('Incorrect password.');
           }
         },
         
@@ -117,6 +130,31 @@ const initialDbData = {
         copyToClipboard() {
           navigator.clipboard.writeText(this.exportJson);
           alert('Database JSON copied to clipboard! Paste it into src/data/' + this.dbType + '.json (or blog-posts.json for blogs).');
+        },
+
+        // --- Settings (ads + announcement bar) ---
+        toggleAllAds() {
+          this.settings.ads.masterEnabled = !this.settings.ads.masterEnabled;
+          this.exportSettings();
+        },
+
+        toggleSlot(slotId) {
+          this.settings.ads.slots[slotId] = !this.settings.ads.slots[slotId];
+          this.exportSettings();
+        },
+
+        toggleAnnouncementBar() {
+          this.settings.announcementBar.enabled = !this.settings.announcementBar.enabled;
+          this.exportSettings();
+        },
+
+        exportSettings() {
+          this.settingsExportJson = JSON.stringify(this.settings, null, 2);
+        },
+
+        copySettingsToClipboard() {
+          navigator.clipboard.writeText(this.settingsExportJson);
+          alert('Settings JSON copied! Paste it into src/data/settings.json, then rebuild + redeploy for changes to go live.');
         }
       }));
     });
@@ -134,7 +172,7 @@ const initialDbData = {
             type="password"
             x-model="password"
             @keyup.enter="login()"
-            placeholder="Enter admin password (hint: admin123)"
+            placeholder="Enter admin password"
             class="w-full bg-bg-primary border border-border-default rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-accent-blue"
           />
           <button
@@ -197,6 +235,14 @@ const initialDbData = {
             >
               Comparisons
             </button>
+            <div class="border-t border-border-default my-1.5"></div>
+            <button
+              @click="dbType = 'settings'; selectedRecord = null;"
+              class="w-full text-left px-3 py-2 rounded-lg font-semibold transition-colors"
+              x-bind:class="dbType === 'settings' ? 'bg-bg-elevated text-accent-pink' : 'text-text-secondary hover:bg-bg-hover hover:text-text-primary'"
+            >
+              ⚙ Ads &amp; Announcement Bar
+            </button>
           </nav>
         </div>
 
@@ -225,11 +271,98 @@ const initialDbData = {
             Database: <span class="gradient-text font-black" x-text="dbType"></span>
           </h2>
           <button
+            x-show="dbType !== 'settings'"
             @click="selectRecord(-1)"
             class="btn btn-primary px-4 py-2 text-xs rounded-lg shadow-glow-blue"
           >
             Add New Record
           </button>
+        </div>
+
+        <!-- Settings Panel: Ads master/per-slot toggle + Announcement Bar -->
+        <div x-show="dbType === 'settings'" x-cloak class="space-y-6">
+
+          <!-- Master ad switch -->
+          <div class="card p-5 bg-bg-secondary border border-border-default rounded-xl">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="font-heading font-bold text-text-primary">All Ads — Master Switch</h3>
+                <p class="text-xs text-text-secondary mt-1">Turns every ad slot on the site off at once (e.g. during AdSense review).</p>
+              </div>
+              <button
+                @click="toggleAllAds()"
+                class="px-4 py-2 rounded-lg text-xs font-bold transition-colors"
+                x-bind:class="settings.ads.masterEnabled ? 'bg-green-500/15 text-green-400 border border-green-500/30' : 'bg-red-500/15 text-red-400 border border-red-500/30'"
+                x-text="settings.ads.masterEnabled ? 'ON — click to disable all' : 'OFF — click to enable all'"
+              ></button>
+            </div>
+          </div>
+
+          <!-- Announcement bar -->
+          <div class="card p-5 bg-bg-secondary border border-border-default rounded-xl space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="font-heading font-bold text-text-primary">Announcement Bar</h3>
+              <button
+                @click="toggleAnnouncementBar()"
+                class="px-4 py-2 rounded-lg text-xs font-bold transition-colors"
+                x-bind:class="settings.announcementBar.enabled ? 'bg-green-500/15 text-green-400 border border-green-500/30' : 'bg-red-500/15 text-red-400 border border-red-500/30'"
+                x-text="settings.announcementBar.enabled ? 'ON' : 'OFF'"
+              ></button>
+            </div>
+            <input
+              type="text"
+              x-model="settings.announcementBar.text"
+              @input="exportSettings()"
+              placeholder="Announcement text"
+              class="w-full bg-bg-primary border border-border-default rounded-lg px-3 py-2 text-sm text-text-primary"
+            />
+            <div class="grid grid-cols-2 gap-3">
+              <input
+                type="text"
+                x-model="settings.announcementBar.linkText"
+                @input="exportSettings()"
+                placeholder="Link text (optional)"
+                class="w-full bg-bg-primary border border-border-default rounded-lg px-3 py-2 text-sm text-text-primary"
+              />
+              <input
+                type="text"
+                x-model="settings.announcementBar.linkHref"
+                @input="exportSettings()"
+                placeholder="Link URL (optional)"
+                class="w-full bg-bg-primary border border-border-default rounded-lg px-3 py-2 text-sm text-text-primary"
+              />
+            </div>
+          </div>
+
+          <!-- Per-slot ad toggles -->
+          <div class="card p-5 bg-bg-secondary border border-border-default rounded-xl">
+            <h3 class="font-heading font-bold text-text-primary mb-3">Individual Ad Slots</h3>
+            <p class="text-xs text-text-secondary mb-4">Turn a single slot off without touching the others — useful if one placement looks bad on a specific page.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-96 overflow-y-auto pr-1">
+              <template x-for="(value, slotId) in settings.ads.slots" :key="slotId">
+                <button
+                  @click="toggleSlot(slotId)"
+                  class="flex items-center justify-between px-3 py-2 rounded-lg text-xs border transition-colors"
+                  x-bind:class="value ? 'border-green-500/30 bg-green-500/5 text-text-primary' : 'border-red-500/30 bg-red-500/5 text-text-tertiary line-through'"
+                >
+                  <span x-text="slotId"></span>
+                  <span x-text="value ? 'ON' : 'OFF'" class="font-bold ml-2"></span>
+                </button>
+              </template>
+            </div>
+          </div>
+
+          <!-- Export -->
+          <div class="card p-5 bg-bg-secondary border border-border-default rounded-xl space-y-3">
+            <p class="text-xs text-text-secondary">Copy this JSON and paste it into <code class="text-accent-blue">src/data/settings.json</code>, then rebuild + redeploy for changes to go live.</p>
+            <button
+              @click="copySettingsToClipboard()"
+              class="btn btn-primary w-full py-2.5 rounded-lg text-sm shadow-glow-blue"
+            >
+              Copy Settings JSON
+            </button>
+            <pre class="bg-bg-primary border border-border-default rounded-lg p-3 text-[10px] text-text-secondary overflow-x-auto max-h-64" x-text="settingsExportJson"></pre>
+          </div>
         </div>
 
         <!-- Edit Form -->
@@ -312,7 +445,7 @@ const initialDbData = {
         </div>
 
         <!-- Records List Table -->
-        <div class="card bg-bg-secondary border border-border-default rounded-xl overflow-hidden">
+        <div x-show="dbType !== 'settings'" class="card bg-bg-secondary border border-border-default rounded-xl overflow-hidden">
           <div class="max-h-96 overflow-y-auto">
             <table class="w-full text-left text-sm border-collapse">
               <thead class="bg-bg-primary border-b border-border-default text-xs uppercase tracking-wider text-text-secondary">

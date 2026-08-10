@@ -1,4 +1,10 @@
 ---
+// AdSlot now reads from settings.json so the admin panel can turn ads
+// off — either everywhere at once (masterEnabled) or one slot at a time
+// (slots[id]). Since this is a static site, toggling a setting requires
+// a rebuild + redeploy to take effect (see admin.astro Settings tab).
+import settings from '../data/settings.json';
+
 interface Props {
   slot: string;
   format?: 'auto' | 'fluid' | 'rectangle' | 'banner';
@@ -7,36 +13,44 @@ interface Props {
 }
 
 const { slot, format = 'auto', responsive = 'true', className = '' } = Astro.props;
+
+// A slot renders only if BOTH the global master switch is on
+// AND this specific slot hasn't been individually turned off.
+const masterEnabled = settings.ads.masterEnabled;
+const slotEnabled = settings.ads.slots[slot] !== false; // default to true if slot id is missing
+const shouldRender = masterEnabled && slotEnabled;
 ---
 
-<div class={`ad-slot my-6 mx-auto w-full flex flex-col items-center justify-center ${className}`}>
-  <!-- Google AdSense Container -->
-  <ins
-    class="adsbygoogle"
-    style="display:block; text-align:center;"
-    data-ad-layout="in-article"
-    data-ad-client="ca-pub-placeholder"
-    data-ad-slot={slot}
-    data-ad-format={format}
-    data-full-width-responsive={responsive}
-  ></ins>
-  <script>
-    // Initialize Google AdSense for this slot
-    try {
-      ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
-    } catch (e) {
-      console.warn('AdSense initialization failed', e);
-    }
-  </script>
+{shouldRender && (
+  <div class={`ad-slot my-6 mx-auto w-full flex flex-col items-center justify-center ${className}`}>
+    <!-- Google AdSense Container -->
+    <ins
+      class="adsbygoogle"
+      style="display:block; text-align:center;"
+      data-ad-layout="in-article"
+      data-ad-client="ca-pub-placeholder"
+      data-ad-slot={slot}
+      data-ad-format={format}
+      data-full-width-responsive={responsive}
+    ></ins>
+    <script>
+      // Initialize Google AdSense for this slot
+      try {
+        ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
+      } catch (e) {
+        console.warn('AdSense initialization failed', e);
+      }
+    </script>
 
-  <!-- Premium Dark Placeholder Label (Visible only for preview/developers or when blocked) -->
-  <div class="w-full py-2.5 px-4 bg-bg-secondary border border-dashed border-border-default rounded-lg flex items-center justify-between text-[10px] text-text-tertiary uppercase tracking-widest select-none">
-    <div class="flex items-center gap-1.5">
-      <span class="w-2.5 h-2.5 rounded-full bg-accent-pink/40 animate-pulse"></span>
-      ADVERTISEMENT
-    </div>
-    <div class="font-semibold text-text-tertiary">
-      Slot ID: {slot}
+    <!-- Premium Dark Placeholder Label (Visible only for preview/developers or when blocked) -->
+    <div class="w-full py-2.5 px-4 bg-bg-secondary border border-dashed border-border-default rounded-lg flex items-center justify-between text-[10px] text-text-tertiary uppercase tracking-widest select-none">
+      <div class="flex items-center gap-1.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-accent-pink/40 animate-pulse"></span>
+        ADVERTISEMENT
+      </div>
+      <div class="font-semibold text-text-tertiary">
+        Slot ID: {slot}
+      </div>
     </div>
   </div>
-</div>
+)}
