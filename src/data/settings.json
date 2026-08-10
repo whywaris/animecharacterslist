@@ -2,16 +2,49 @@
   "ads": {
     "masterEnabled": true,
     "slots": {
-      "header-ad": true,
-      "sidebar-ad": true,
-      "content-ad": true,
-      "footer-ad": true
+      "about-bottom": true,
+      "about-top": true,
+      "anime-detail-bottom": true,
+      "anime-detail-mid": true,
+      "anime-detail-top": true,
+      "anime-directory-bottom": true,
+      "anime-directory-top": true,
+      "blog-detail-bottom": true,
+      "blog-detail-mid": true,
+      "blog-detail-top": true,
+      "blog-index-bottom": true,
+      "blog-index-top": true,
+      "character-profile-bottom": true,
+      "character-profile-mid": true,
+      "character-profile-top": true,
+      "characters-directory-bottom": true,
+      "characters-directory-top": true,
+      "compare-detail-bottom": true,
+      "compare-detail-mid": true,
+      "compare-detail-top": true,
+      "compare-index-bottom": true,
+      "compare-index-top": true,
+      "contact-bottom": true,
+      "contact-top": true,
+      "homepage-bottom": true,
+      "homepage-hero-bottom": true,
+      "homepage-mid": true,
+      "list-detail-bottom": true,
+      "list-detail-mid": true,
+      "list-detail-top": true,
+      "lists-index-bottom": true,
+      "lists-index-top": true,
+      "quiz-detail-bottom": true,
+      "quiz-detail-top": true,
+      "quizzes-index-bottom": true,
+      "quizzes-index-top": true
     }
   },
   "announcementBar": {
     "enabled": false,
-    "text": "Welcome to AnimeCharactersList!",
-    "linkText": "",
-    "linkHref": ""
+    "text": "New characters added every week — check out the latest entries!",
+    "linkText": "See what's new",
+    "linkHref": "/blog",
+    "style": "info"
   }
 }
