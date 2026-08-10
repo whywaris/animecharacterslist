@@ -2,6 +2,7 @@
 import BaseLayout from './BaseLayout.astro';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
+import AnnouncementBar from '../components/AnnouncementBar.astro';
 
 interface Props {
   title: string;
@@ -26,6 +27,7 @@ const { title, description, image, type, canonicalUrl, schemaType, schemaData } 
   schemaData={schemaData}
 >
   <div class="flex flex-col min-h-screen">
+    <AnnouncementBar />
     <Navbar />
     <main class="flex-grow">
       <slot />
