@@ -1,0 +1,164 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import CharacterCard from '../../components/CharacterCard.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import anime from '../../data/anime.json';
+import characters from '../../data/characters.json';
+
+export async function getStaticPaths() {
+  return anime.map(item => ({
+    params: { slug: item.slug },
+    props: { series: item }
+  }));
+}
+
+const { series } = Astro.props;
+
+// Filter characters belonging to this anime
+const seriesCharacters = characters.filter(c => c.anime === series.slug);
+
+// Find related anime series details if they exist in the database
+const relatedSeries = (series.relatedAnime || [])
+  .map(relSlug => anime.find(a => a.slug === relSlug))
+  .filter(Boolean);
+---
+
+<Layout
+  title={`${series.title} — Characters, Info & Ratings`}
+  description={`Browse characters from ${series.title}. View ratings, studio information, episode counts, status, and full cast bios from the series.`}
+  image={series.coverImage || series.image}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <!-- Breadcrumb -->
+    <Breadcrumb
+      items={[
+        { label: 'Anime Series', href: '/anime' },
+        { label: series.title }
+      ]}
+    />
+
+    <!-- Google Ad Slot Top -->
+    <AdSlot slot="anime-detail-top" format="banner" />
+
+    <!-- Hero Header Card -->
+    <div class="card bg-bg-secondary border border-border-default rounded-2xl overflow-hidden mb-8">
+      <!-- Cover Banner -->
+      <div class="relative w-full aspect-[3/1] md:aspect-[4/1] overflow-hidden bg-bg-primary border-b border-border-default">
+        <img
+          src={series.coverImage || series.image}
+          alt={series.title}
+          width="1920"
+          height="600"
+          class="w-full h-full object-cover"
+          loading="eager"
+        />
+        
+        <!-- Bottom overlay gradient -->
+        <div class="absolute inset-0 bg-gradient-to-t from-bg-secondary via-transparent to-transparent"></div>
+
+        <!-- Rating Badge Overlay -->
+        <div class="absolute top-4 right-4 bg-bg-secondary/95 backdrop-blur-sm border border-border-default rounded-xl px-3.5 py-1.5 flex items-center gap-1.5 shadow-lg">
+          <svg class="w-5 h-5 text-accent-yellow fill-accent-yellow" viewBox="0 0 24 24">
+            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+          </svg>
+          <span class="text-sm font-black text-text-primary">{series.rating.toFixed(1)}</span>
+        </div>
+      </div>
+
+      <!-- Info Area -->
+      <div class="p-6 md:p-8 space-y-6">
+        <div>
+          <div class="flex flex-wrap items-center gap-2.5 mb-2">
+            <span class="badge badge-blue">{series.status}</span>
+            <span class="badge badge-pink">{series.studio}</span>
+          </div>
+          <h1 class="font-heading text-3xl md:text-5xl font-black text-text-primary leading-tight">
+            {series.title}
+          </h1>
+          {series.japaneseTitle && (
+            <span class="text-lg font-medium text-text-tertiary block mt-1">{series.japaneseTitle}</span>
+          )}
+        </div>
+
+        <!-- Synopsis -->
+        <div class="text-text-secondary text-sm md:text-base leading-relaxed border-t border-border-muted pt-6">
+          <h2 class="text-xs font-bold text-text-secondary uppercase tracking-widest mb-3">Series Synopsis</h2>
+          <p>{series.synopsis}</p>
+        </div>
+
+        <!-- Meta Details Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 border-t border-border-muted pt-6 text-sm">
+          <div>
+            <span class="block text-[10px] text-text-tertiary uppercase font-bold tracking-wider">Studio</span>
+            <span class="font-bold text-text-primary">{series.studio}</span>
+          </div>
+          <div>
+            <span class="block text-[10px] text-text-tertiary uppercase font-bold tracking-wider">Episodes</span>
+            <span class="font-bold text-text-primary">{series.episodes}</span>
+          </div>
+          <div>
+            <span class="block text-[10px] text-text-tertiary uppercase font-bold tracking-wider">Aired Date</span>
+            <span class="font-bold text-text-primary">{series.aired}</span>
+          </div>
+          <div>
+            <span class="block text-[10px] text-text-tertiary uppercase font-bold tracking-wider">Genres</span>
+            <span class="font-bold text-text-primary">{series.genres.slice(0, 3).join(', ')}</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Google Ad Slot Mid -->
+    <AdSlot slot="anime-detail-mid" format="auto" />
+
+    <!-- Characters List in Series -->
+    <section class="mb-12">
+      <div class="flex items-end justify-between mb-8">
+        <div>
+          <h2 class="section-title">Characters in {series.title}</h2>
+          <p class="text-text-secondary text-sm">All characters indexed from this franchise</p>
+        </div>
+        <span class="text-xs text-text-tertiary font-bold">{seriesCharacters.length} Profiles</span>
+      </div>
+
+      {seriesCharacters.length > 0 ? (
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+          {seriesCharacters.map(char => (
+            <CharacterCard character={char} />
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-16 bg-bg-secondary border border-dashed border-border-default rounded-xl">
+          <p class="text-text-secondary text-sm">No characters indexed for this series yet.</p>
+        </div>
+      )}
+    </section>
+
+    <!-- Related Series Section -->
+    {relatedSeries.length > 0 && (
+      <section class="card p-6 md:p-8 bg-bg-secondary border border-border-default rounded-2xl mb-8">
+        <h2 class="section-title mb-6">Related Anime Series</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {relatedSeries.map(rel => (
+            <div class="card p-4 bg-bg-primary hover:border-accent-orange transition-all duration-300 flex items-center gap-4">
+              <a href={`/anime/${rel.slug}`} class="block w-20 aspect-video rounded-lg overflow-hidden bg-bg-secondary border border-border-default flex-shrink-0">
+                <img src={rel.image} alt={rel.title} class="w-full h-full object-cover" loading="lazy" />
+              </a>
+              <div class="min-w-0">
+                <h3 class="font-heading font-bold text-sm text-text-primary hover:text-accent-orange transition-colors truncate">
+                  <a href={`/anime/${rel.slug}`}>{rel.title}</a>
+                </h3>
+                <span class="text-[10px] text-text-tertiary uppercase font-semibold">{rel.studio} • {rel.episodes} eps</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Google Ad Slot Bottom -->
+    <AdSlot slot="anime-detail-bottom" format="banner" />
+  </div>
+</Layout>

@@ -1,0 +1,53 @@
+[
+  {
+    "slug": "goku-vs-naruto",
+    "character1": "goku",
+    "character2": "naruto-uzumaki",
+    "title": "Goku vs Naruto — Who Would Win?",
+    "description": "The ultimate cross-anime showdown between Dragon Ball's Saiyan warrior and Naruto's Seventh Hokage.",
+    "stats": {
+      "power": { "char1": 100, "char2": 85 },
+      "speed": { "char1": 98, "char2": 82 },
+      "intelligence": { "char1": 60, "char2": 75 },
+      "durability": { "char1": 95, "char2": 80 },
+      "versatility": { "char1": 85, "char2": 90 },
+      "popularity": { "char1": 99, "char2": 98 }
+    },
+    "analysis": "In a direct power comparison, Goku at Mastered Ultra Instinct operates on a scale far beyond Naruto's Six Paths Sage Mode. Goku has fought and matched Gods of Destruction, while Naruto's top-tier feats involve battling Otsutsuki clan members. However, Naruto's shadow clone strategy, sage techniques, and tactical intelligence give him versatility advantages. Ultimately, Goku's raw power, speed, and experience fighting universal-level threats give him the edge in this legendary matchup.",
+    "winner": "goku"
+  },
+  {
+    "slug": "gojo-vs-sukuna",
+    "character1": "gojo-satoru",
+    "character2": "sukuna",
+    "title": "Gojo vs Sukuna — The Battle of the Strongest",
+    "description": "The definitive showdown between the strongest sorcerer and the King of Curses in Jujutsu Kaisen.",
+    "stats": {
+      "power": { "char1": 96, "char2": 98 },
+      "speed": { "char1": 95, "char2": 93 },
+      "intelligence": { "char1": 92, "char2": 90 },
+      "durability": { "char1": 99, "char2": 88 },
+      "versatility": { "char1": 95, "char2": 92 },
+      "popularity": { "char1": 97, "char2": 92 }
+    },
+    "analysis": "This matchup actually plays out in the manga during the Shinjuku Showdown. Gojo's Infinity provides unmatched defense, while Sukuna's Malevolent Shrine can bypass domain barriers. Both fighters push each other to absolute limits, with Gojo's Six Eyes giving him efficient cursed energy usage and Sukuna's millennia of combat experience providing tactical advantages. The fight is considered nearly even, with subtle differences in domain expansion mechanics and adaptability determining the outcome.",
+    "winner": "sukuna"
+  },
+  {
+    "slug": "levi-vs-mikasa",
+    "character1": "levi-ackerman",
+    "character2": "mikasa-ackerman",
+    "title": "Levi vs Mikasa — Ackerman Showdown",
+    "description": "Two of humanity's strongest soldiers share the Ackerman bloodline, but who is the superior fighter?",
+    "stats": {
+      "power": { "char1": 95, "char2": 93 },
+      "speed": { "char1": 98, "char2": 95 },
+      "intelligence": { "char1": 90, "char2": 82 },
+      "durability": { "char1": 85, "char2": 88 },
+      "versatility": { "char1": 92, "char2": 85 },
+      "popularity": { "char1": 95, "char2": 91 }
+    },
+    "analysis": "Both Levi and Mikasa possess the Ackerman clan's superhuman combat abilities, but Levi has the clear advantage in experience, technique, and tactical awareness. Levi's decades of combat, including years in the Underground and Survey Corps, have honed his skills to an unmatched level. While Mikasa has the physical potential to match or even surpass Levi, his battle-tested experience, spinning slash technique, and leadership abilities give him the edge. Prime Levi is consistently portrayed as the single most skilled human combatant in Attack on Titan.",
+    "winner": "levi-ackerman"
+  }
+]

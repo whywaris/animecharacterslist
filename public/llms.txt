@@ -1,0 +1,31 @@
+# AnimeCharactersList.com
+
+AnimeCharactersList.com is a comprehensive, static, search-engine-optimized fan directory cataloging 100+ anime characters and 10 major franchises. It features interactive personality quizzes, head-to-head combat parameters comparisons, custom lists, and a rich editorial blog.
+
+## Tech Stack
+- **Framework**: Astro (static site generation)
+- **Styling**: Tailwind CSS (v4.0.0 via Vite plugin)
+- **Interactivity**: Alpine.js (zero-backend dynamic pages)
+- **Data Source**: JSON database files in `src/data/`
+- **Monetization**: Google AdSense slots integrated dynamically
+- **SEO Elements**: Automatic JSON-LD Schema (WebSite, Person, Article, ItemList)
+
+## File Structure & Routing
+- `/` - Landing page with hero section, recent articles, features list, and auto-completing live search.
+- `/characters/` - Main catalog with search inputs, series/role filters, sorting parameters, and hybrid DOM pagination.
+- `/character/[slug]` - Deep profiles featuring ratings, stats table, abilities power bars, transformation milestones, relationships, and accordion FAQs.
+- `/anime/` - List of all indexed franchises including episode counts and studios.
+- `/anime/[slug]` - Franchise profile listing synopsis, metrics, and associated cast grids.
+- `/list/` - Rankings directory covering strongest characters, villains, and duos.
+- `/list/[slug]` - Top rankings list detail pages containing numbered position cards.
+- `/blog/` - Articles directory covering guides, history, and analyses.
+- `/blog/[slug]` - Articles detail pages with in-built markdown compiler.
+- `/quiz/` - Interactive quizzes index.
+- `/quiz/[slug]` - AlpineJS personality character matchers and trivia games.
+- `/comparison/` - Head-to-head stats compare arena with visual progress bars.
+- `/comparison/[slug]` - Predefined legendary matchup analyses (e.g. Goku vs Naruto).
+- `/admin` - Private client-side JSON record editor (password-protected: `admin123`).
+
+## Sitemap index
+Sitemap indexing details are available at: https://animecharacterslist.com/sitemap-index.xml
+All admin-related panel paths are strictly excluded.

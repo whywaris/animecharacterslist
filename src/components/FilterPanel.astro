@@ -1,0 +1,107 @@
+---
+interface Props {
+  animeList: { slug: string; title: string }[];
+}
+
+const { animeList } = Astro.props;
+---
+
+<div class="glass border border-border-default rounded-xl p-5 mb-8">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <!-- Search Input -->
+    <div class="flex flex-col gap-1.5">
+      <label for="char-search" class="text-xs font-bold text-text-secondary uppercase tracking-wider">Search</label>
+      <div class="relative">
+        <input
+          id="char-search"
+          type="text"
+          x-model="search"
+          placeholder="Filter by name..."
+          class="w-full bg-bg-primary border border-border-default rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-accent-blue"
+        />
+        <template x-if="search">
+          <button @click="search = ''" class="absolute right-2.5 top-2.5 text-text-secondary hover:text-text-primary text-xs">
+            ✕
+          </button>
+        </template>
+      </div>
+    </div>
+
+    <!-- Anime Series Filter -->
+    <div class="flex flex-col gap-1.5">
+      <label for="filter-anime" class="text-xs font-bold text-text-secondary uppercase tracking-wider">Anime Series</label>
+      <select
+        id="filter-anime"
+        x-model="anime"
+        class="w-full bg-bg-primary border border-border-default rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-accent-blue cursor-pointer"
+      >
+        <option value="all">All Series</option>
+        {animeList.map(a => (
+          <option value={a.slug}>{a.title}</option>
+        ))}
+      </select>
+    </div>
+
+    <!-- Role Filter -->
+    <div class="flex flex-col gap-1.5">
+      <label for="filter-role" class="text-xs font-bold text-text-secondary uppercase tracking-wider">Role</label>
+      <select
+        id="filter-role"
+        x-model="role"
+        class="w-full bg-bg-primary border border-border-default rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-accent-blue cursor-pointer"
+      >
+        <option value="all">All Roles</option>
+        <option value="Protagonist">Protagonists</option>
+        <option value="Antagonist">Antagonists</option>
+        <option value="Supporting">Supporting</option>
+      </select>
+    </div>
+
+    <!-- Sort Selector -->
+    <div class="flex flex-col gap-1.5">
+      <label for="sort-select" class="text-xs font-bold text-text-secondary uppercase tracking-wider">Sort By</label>
+      <select
+        id="sort-select"
+        x-model="sort"
+        @change="sortCards()"
+        class="w-full bg-bg-primary border border-border-default rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-accent-blue cursor-pointer"
+      >
+        <option value="popularity">Most Popular</option>
+        <option value="rating">Highest Rated</option>
+        <option value="name">Name (A-Z)</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Clear Filters Indicator -->
+  <div
+    class="flex items-center justify-between mt-4 pt-4 border-t border-border-muted text-xs text-text-secondary"
+    x-show="search !== '' || anime !== 'all' || role !== 'all'"
+    x-cloak
+  >
+    <div class="flex items-center gap-1.5">
+      <span>Active Filters:</span>
+      <template x-if="search">
+        <span class="bg-bg-elevated px-2 py-1 rounded border border-border-default flex items-center gap-1 text-[10px] text-accent-blue">
+          Search: "<span x-text="search"></span>"
+          <button @click="search = ''" class="hover:text-accent-pink">✕</button>
+        </span>
+      </template>
+      <template x-if="anime !== 'all'">
+        <span class="bg-bg-elevated px-2 py-1 rounded border border-border-default flex items-center gap-1 text-[10px] text-accent-orange">
+          Anime: <span x-text="anime"></span>
+          <button @click="anime = 'all'" class="hover:text-accent-pink">✕</button>
+        </span>
+      </template>
+      <template x-if="role !== 'all'">
+        <span class="bg-bg-elevated px-2 py-1 rounded border border-border-default flex items-center gap-1 text-[10px] text-accent-pink">
+          Role: <span x-text="role"></span>
+          <button @click="role = 'all'" class="hover:text-accent-pink">✕</button>
+        </span>
+      </template>
+    </div>
+    <button @click="search = ''; anime = 'all'; role = 'all';" class="text-accent-pink hover:underline font-semibold">
+      Reset All
+    </button>
+  </div>
+</div>

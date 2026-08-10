@@ -1,0 +1,72 @@
+---
+interface Props {
+  character: {
+    slug: string;
+    name: string;
+    japaneseName?: string;
+    animeName: string;
+    image: string;
+    rating: number;
+    role: string;
+    species: string;
+    tags?: string[];
+  };
+}
+
+const { character } = Astro.props;
+---
+
+<div class="card group flex flex-col h-[440px] bg-bg-secondary border border-border-default rounded-xl overflow-hidden hover:-translate-y-2 hover:border-accent-blue hover:shadow-glow-blue transition-all duration-300">
+  <a href={`/character/${character.slug}`} class="block relative h-[70%] w-full overflow-hidden bg-bg-primary">
+    <!-- Image with lazy load and fixed size -->
+    <img
+      src={character.image}
+      alt={character.name}
+      loading="lazy"
+      width="400"
+      height="600"
+      class="object-cover w-full h-full group-hover:scale-108 transition-transform duration-500"
+    />
+    
+    <!-- Rating badge overlay -->
+    <div class="absolute top-3 right-3 bg-bg-secondary/90 backdrop-blur-sm border border-border-default rounded-lg px-2.5 py-1 flex items-center gap-1.5 shadow-md">
+      <svg class="w-4 h-4 text-accent-yellow fill-accent-yellow" viewBox="0 0 24 24">
+        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+      </svg>
+      <span class="text-xs font-bold text-text-primary">{character.rating.toFixed(1)}</span>
+    </div>
+
+    <!-- Role badge overlay bottom -->
+    <div class="absolute bottom-3 left-3 flex gap-1">
+      <span class={`badge ${character.role.includes('Protagonist') ? 'badge-blue' : character.role.includes('Antagonist') ? 'badge-pink' : 'badge-green'}`}>
+        {character.role.split(' ')[0]}
+      </span>
+    </div>
+  </a>
+
+  <!-- Text Details (30% height block) -->
+  <div class="p-4 flex flex-col justify-between h-[30%] bg-bg-secondary/40 backdrop-blur-sm">
+    <div>
+      <span class="text-[10px] text-text-secondary uppercase tracking-widest font-bold mb-0.5 block">{character.animeName}</span>
+      <h3 class="font-heading font-bold text-base text-text-primary group-hover:text-accent-blue transition-colors line-clamp-1">
+        <a href={`/character/${character.slug}`}>
+          {character.name}
+        </a>
+      </h3>
+      {character.japaneseName && (
+        <span class="text-[10px] text-text-tertiary font-medium block truncate">{character.japaneseName}</span>
+      )}
+    </div>
+    
+    <!-- Tags -->
+    {character.tags && (
+      <div class="flex flex-wrap gap-1 mt-2 pt-2 border-t border-border-muted overflow-hidden">
+        {character.tags.slice(0, 2).map((tag: string) => (
+          <span class="text-[9px] font-bold bg-bg-elevated px-2 py-0.5 rounded text-text-secondary uppercase tracking-wider">
+            {tag}
+          </span>
+        ))}
+      </div>
+    )}
+  </div>
+</div>

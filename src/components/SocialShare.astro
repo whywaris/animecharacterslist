@@ -1,0 +1,71 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  url?: string;
+}
+
+const { title, description = 'Check out this awesome anime character!', url } = Astro.props;
+
+// Build sharing endpoints
+const shareTitle = `${title} - AnimeCharactersList.com`;
+---
+
+<div class="social-share my-6 flex flex-col gap-3 py-4 border-y border-border-muted" x-data="{ copied: false, copy() { navigator.clipboard.writeText(window.location.href); this.copied = true; setTimeout(() => this.copied = false, 2000); } }">
+  <span class="text-xs font-bold text-text-secondary uppercase tracking-wider">Share this Profile</span>
+  <div class="flex flex-wrap gap-2.5">
+    <!-- Twitter/X -->
+    <a
+      href=""
+      target="_blank"
+      rel="noopener noreferrer"
+      class="btn btn-secondary px-3.5 py-2 text-xs rounded-lg flex items-center gap-2 hover:border-accent-blue"
+      x-bind:href="`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareTitle)}&url=${encodeURIComponent(window.location.href)}`"
+    >
+      <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+      </svg>
+      Twitter
+    </a>
+
+    <!-- Facebook -->
+    <a
+      href=""
+      target="_blank"
+      rel="noopener noreferrer"
+      class="btn btn-secondary px-3.5 py-2 text-xs rounded-lg flex items-center gap-2 hover:border-accent-blue"
+      x-bind:href="`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`"
+    >
+      <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+        <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
+      </svg>
+      Facebook
+    </a>
+
+    <!-- WhatsApp -->
+    <a
+      href=""
+      target="_blank"
+      rel="noopener noreferrer"
+      class="btn btn-secondary px-3.5 py-2 text-xs rounded-lg flex items-center gap-2 hover:border-accent-blue"
+      x-bind:href="`https://api.whatsapp.com/send?text=${encodeURIComponent(shareTitle + ' ') + window.location.href}`"
+    >
+      <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+        <path d="M12.018 2C6.486 2 2 6.48 2 12.008c0 1.764.462 3.42 1.272 4.872L2 22l5.286-1.386a9.972 9.972 0 0 0 4.732 1.194c5.526 0 10.02-4.482 10.02-10.014C22.038 6.48 21.542 2 12.018 2zm.006 18.024a8.006 8.006 0 0 1-4.086-1.122l-.294-.174-3.036.798.816-2.952-.192-.306A7.98 7.98 0 0 1 4.02 12.01c0-4.422 3.594-8.01 8.004-8.01 4.416 0 8.01 3.594 8.01 8.016 0 4.422-3.594 8.01-8.01 8.01z" />
+      </svg>
+      WhatsApp
+    </a>
+
+    <!-- Copy Link -->
+    <button
+      type="button"
+      @click="copy()"
+      class="btn btn-secondary px-3.5 py-2 text-xs rounded-lg flex items-center gap-2 hover:border-accent-blue"
+    >
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
+      </svg>
+      <span x-text="copied ? 'Copied!' : 'Copy Link'">Copy Link</span>
+    </button>
+  </div>
+</div>

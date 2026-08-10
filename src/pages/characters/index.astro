@@ -1,0 +1,226 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import CharacterCard from '../../components/CharacterCard.astro';
+import FilterPanel from '../../components/FilterPanel.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import characters from '../../data/characters.json';
+import anime from '../../data/anime.json';
+
+// Build list of unique anime series for the filter dropdown
+const animeList = anime.map(a => ({
+  slug: a.slug,
+  title: a.title
+}));
+
+// Sort initial list by popularity to render a stable server state
+const initialCharacters = characters.sort((a, b) => b.popularity - a.popularity);
+---
+
+<Layout
+  title="Anime Characters Directory — Complete 100+ Database"
+  description="Search and filter our comprehensive directory of 100+ anime characters. View stats, roles, and profiles for characters from Naruto, Dragon Ball, One Piece, and more."
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <!-- Breadcrumb -->
+    <Breadcrumb items={[{ label: 'Characters' }]} />
+
+    <div class="text-left mb-8">
+      <h1 class="text-text-primary text-3xl md:text-5xl font-extrabold tracking-tight leading-none mb-3">
+        Anime <span class="gradient-text font-black">Characters Catalog</span>
+      </h1>
+      <p class="text-text-secondary text-sm md:text-base max-w-2xl">
+        Explore detailed character information, power metrics, roles, and transformations. Use the options below to filter by series, role, or sort results.
+      </p>
+    </div>
+
+    <!-- Google Ad Slot -->
+    <AdSlot slot="characters-directory-top" format="banner" />
+
+    <!-- Unified Filtering & Pagination Container -->
+    <div
+      x-data="{
+        search: '',
+        anime: 'all',
+        role: 'all',
+        sort: 'popularity',
+        page: 1,
+        perPage: 16,
+        total: 0,
+        init() {
+          this.filterAndSort();
+          this.$watch('search', () => { this.page = 1; this.filterAndSort(); });
+          this.$watch('anime', () => { this.page = 1; this.filterAndSort(); });
+          this.$watch('role', () => { this.page = 1; this.filterAndSort(); });
+        },
+        filterAndSort() {
+          const cards = Array.from(this.$refs.grid.children);
+          let matches = [];
+          
+          // Filter loop
+          cards.forEach(card => {
+            const name = card.getAttribute('data-name').toLowerCase();
+            const tags = card.getAttribute('data-tags') || '';
+            const cardAnime = card.getAttribute('data-anime');
+            const cardRole = card.getAttribute('data-role');
+            
+            const matchesSearch = name.includes(this.search.toLowerCase()) || tags.includes(this.search.toLowerCase());
+            const matchesAnime = this.anime === 'all' || cardAnime === this.anime;
+            const matchesRole = this.role === 'all' || cardRole === this.role;
+            
+            if (matchesSearch && matchesAnime && matchesRole) {
+              matches.push(card);
+            } else {
+              card.style.display = 'none';
+            }
+          });
+          
+          this.total = matches.length;
+          
+          // Sort matches
+          if (this.sort === 'name') {
+            matches.sort((a, b) => a.getAttribute('data-name').localeCompare(b.getAttribute('data-name')));
+          } else if (this.sort === 'rating') {
+            matches.sort((a, b) => parseFloat(b.getAttribute('data-rating')) - parseFloat(a.getAttribute('data-rating')));
+          } else if (this.sort === 'popularity') {
+            matches.sort((a, b) => parseInt(b.getAttribute('data-popularity')) - parseInt(a.getAttribute('data-popularity')));
+          }
+          
+          // Re-append sorted cards in DOM
+          matches.forEach(card => this.$refs.grid.appendChild(card));
+          
+          // Paginate: Show only matching cards on current page, hide others
+          const start = (this.page - 1) * this.perPage;
+          const end = this.page * this.perPage;
+          
+          matches.forEach((card, index) => {
+            if (index >= start && index < end) {
+              card.style.display = '';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        },
+        sortCards() {
+          this.filterAndSort();
+        },
+        nextPage() {
+          if (this.page * this.perPage < this.total) {
+            this.page++;
+            this.filterAndSort();
+            window.scrollTo({ top: this.$refs.grid.offsetTop - 120, behavior: 'smooth' });
+          }
+        },
+        prevPage() {
+          if (this.page > 1) {
+            this.page--;
+            this.filterAndSort();
+            window.scrollTo({ top: this.$refs.grid.offsetTop - 120, behavior: 'smooth' });
+          }
+        },
+        totalPages() {
+          return Math.ceil(this.total / this.perPage) || 1;
+        }
+      }"
+    >
+      <!-- Interactive Filter Panel Component -->
+      <FilterPanel animeList={animeList} />
+
+      <!-- Interactive Genre Chips Row -->
+      <div class="flex gap-2 overflow-x-auto pb-4 pt-2 scrollbar-none select-none">
+        <template x-for="g in ['Shonen', 'Seinen', 'Ninja', 'Saiyan', 'Pirate', 'Quincy', 'Hero', 'Demon', 'Sorcerer', 'Hunter', 'Slayer', 'Speed', 'Strategist', 'Immortal']" :key="g">
+          <button
+            type="button"
+            @click="search.toLowerCase() === g.toLowerCase() ? search = '' : search = g.toLowerCase()"
+            class="px-4 py-1.5 rounded-full text-xs font-bold transition-all border flex-shrink-0 cursor-pointer"
+            x-bind:class="search.toLowerCase() === g.toLowerCase() 
+              ? 'bg-gradient-accent text-white border-transparent shadow-glow-blue' 
+              : 'bg-bg-secondary hover:bg-bg-hover text-text-secondary hover:text-text-primary border-border-default hover:border-accent-blue'"
+            x-text="g"
+          >
+          </button>
+        </template>
+      </div>
+
+      <!-- Count Summary -->
+      <div class="flex items-center justify-between mb-6 text-sm text-text-secondary">
+        <div>
+          Showing <span class="text-text-primary font-bold" x-text="total"></span> of <span class="text-text-primary font-bold">{initialCharacters.length}</span> Characters
+        </div>
+        <div x-show="total > 0" x-cloak>
+          Page <span class="text-text-primary font-bold" x-text="page"></span> of <span class="text-text-primary font-bold" x-text="totalPages()"></span>
+        </div>
+      </div>
+
+      <!-- Characters Grid -->
+      <div
+        id="characters-grid"
+        x-ref="grid"
+        class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6"
+      >
+        {initialCharacters.map(char => (
+          <div
+            data-name={char.name}
+            data-anime={char.anime}
+            data-role={char.role}
+            data-rating={char.rating.toString()}
+            data-popularity={char.popularity.toString()}
+            data-tags={char.tags ? char.tags.join(',').toLowerCase() : ''}
+            class="character-card-wrapper transition-all duration-300"
+          >
+            <CharacterCard character={char} />
+          </div>
+        ))}
+      </div>
+
+      <!-- No Results State -->
+      <div
+        class="text-center py-16 bg-bg-secondary border border-dashed border-border-default rounded-xl mt-6"
+        x-show="total === 0"
+        x-cloak
+      >
+        <svg class="mx-auto h-12 w-12 text-text-tertiary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <h3 class="mt-4 text-lg font-bold text-text-primary">No characters found</h3>
+        <p class="mt-1 text-sm text-text-secondary">Try adjusting your filters or search query.</p>
+        <button
+          @click="search = ''; anime = 'all'; role = 'all'; page = 1; filterAndSort();"
+          class="btn btn-primary px-4 py-2 text-xs rounded-lg mt-4"
+        >
+          Reset Filters
+        </button>
+      </div>
+
+      <!-- Client-side Interactive Pagination Controls -->
+      <div class="flex items-center justify-center gap-4 my-12" x-show="totalPages() > 1" x-cloak>
+        <button
+          @click="prevPage()"
+          class="btn btn-secondary px-4 py-2 text-xs rounded-lg flex items-center gap-1 hover:border-accent-blue"
+          x-bind:disabled="page === 1"
+          x-bind:class="page === 1 ? 'opacity-40 cursor-not-allowed border-border-muted' : ''"
+        >
+          &larr; Prev
+        </button>
+        
+        <span class="text-sm font-semibold text-text-secondary">
+          Page <span x-text="page" class="text-text-primary font-bold"></span> of <span x-text="totalPages()" class="text-text-primary font-bold"></span>
+        </span>
+        
+        <button
+          @click="nextPage()"
+          class="btn btn-secondary px-4 py-2 text-xs rounded-lg flex items-center gap-1 hover:border-accent-blue"
+          x-bind:disabled="page * perPage >= total"
+          x-bind:class="page * perPage >= total ? 'opacity-40 cursor-not-allowed border-border-muted' : ''"
+        >
+          Next &rarr;
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Ad Slot -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-8">
+    <AdSlot slot="characters-directory-bottom" format="banner" />
+  </div>
+</Layout>

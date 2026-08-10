@@ -1,0 +1,365 @@
+---
+import Layout from '../layouts/Layout.astro';
+import characters from '../data/characters.json';
+import anime from '../data/anime.json';
+import lists from '../data/lists.json';
+import blogPosts from '../data/blog-posts.json';
+import quizzes from '../data/quizzes.json';
+import comparisons from '../data/comparisons.json';
+
+// Build a unified initial state to pass to the client
+const initialDbData = {
+  characters,
+  anime,
+  lists,
+  blogs: blogPosts,
+  quizzes,
+  comparisons
+};
+---
+
+<Layout
+  title="Admin Panel — Database Editor"
+  description="Client-side administration dashboard and database editor for AnimeCharactersList."
+>
+  <!-- Seed JSON Data for client-side Alpine component -->
+  <script id="admin-db-data" type="application/json" set:html={JSON.stringify(initialDbData)}></script>
+
+  <!-- Clean AlpineJS Component Definition -->
+  <script is:inline>
+    document.addEventListener('alpine:init', () => {
+      const el = document.getElementById('admin-db-data');
+      const rawData = JSON.parse(el.textContent);
+
+      Alpine.data('adminDashboard', () => ({
+        isAuthenticated: false,
+        password: '',
+        dbType: 'characters',
+        records: {
+          characters: [...rawData.characters],
+          anime: [...rawData.anime],
+          lists: [...rawData.lists],
+          blogs: [...rawData.blogs],
+          quizzes: [...rawData.quizzes],
+          comparisons: [...rawData.comparisons]
+        },
+        selectedRecord: null,
+        editingIndex: -1,
+        exportJson: '',
+        
+        init() {
+          this.exportDatabase();
+        },
+        
+        login() {
+          if (this.password === 'admin123') {
+            this.isAuthenticated = true;
+          } else {
+            alert('Incorrect password! Try admin123');
+          }
+        },
+        
+        selectRecord(index) {
+          this.editingIndex = index;
+          if (index === -1) {
+            this.selectedRecord = this.createEmptyRecord();
+          } else {
+            this.selectedRecord = JSON.parse(JSON.stringify(this.records[this.dbType][index]));
+          }
+        },
+        
+        createEmptyRecord() {
+          if (this.dbType === 'characters') {
+            return { slug: '', name: '', japaneseName: '', anime: '', animeName: '', image: 'https://placehold.co/400x600/161B22/58A6FF?text=New+Character', coverImage: '', rating: 8.0, species: 'Human', role: 'Supporting', height: '', weight: '', age: '', gender: 'Male', birthday: '', bloodType: '', hairColor: '', eyeColor: '', description: '', abilities: [], transformations: [], relationships: [], voiceActors: [], faq: [], tags: [], popularity: 5000 };
+          } else if (this.dbType === 'anime') {
+            return { slug: '', title: '', japaneseTitle: '', image: '', coverImage: '', rating: 8.0, episodes: 12, studio: '', status: 'Ongoing', aired: '', genres: [], synopsis: '', characters: [], relatedAnime: [] };
+          } else if (this.dbType === 'lists') {
+            return { slug: '', title: '', description: '', image: '', category: 'Character Lists', entries: [] };
+          } else if (this.dbType === 'blogs') {
+            return { slug: '', title: '', excerpt: '', featuredImage: '', date: new Date().toISOString().split('T')[0], author: 'AnimeCharactersList Team', readingTime: '5 min', tags: [], content: '' };
+          } else if (this.dbType === 'quizzes') {
+            return { slug: '', title: '', description: '', image: '', questions: [], results: [] };
+          } else if (this.dbType === 'comparisons') {
+            return { slug: '', character1: '', character2: '', title: '', description: '', stats: { power: { char1: 80, char2: 80 }, speed: { char1: 80, char2: 80 }, intelligence: { char1: 80, char2: 80 }, durability: { char1: 80, char2: 80 }, versatility: { char1: 80, char2: 80 } }, analysis: '', winner: '' };
+          }
+          return {};
+        },
+        
+        saveRecord() {
+          if (!this.selectedRecord.slug) {
+            alert('Slug is required!');
+            return;
+          }
+          
+          const db = this.records[this.dbType];
+          if (this.editingIndex === -1) {
+            db.push(this.selectedRecord);
+          } else {
+            db[this.editingIndex] = this.selectedRecord;
+          }
+          
+          this.selectedRecord = null;
+          this.editingIndex = -1;
+          this.exportDatabase();
+        },
+        
+        deleteRecord(index) {
+          if (confirm('Are you sure you want to delete this record?')) {
+            this.records[this.dbType].splice(index, 1);
+            this.exportDatabase();
+          }
+        },
+        
+        exportDatabase() {
+          this.exportJson = JSON.stringify(this.records[this.dbType], null, 2);
+        },
+        
+        copyToClipboard() {
+          navigator.clipboard.writeText(this.exportJson);
+          alert('Database JSON copied to clipboard! Paste it into src/data/' + this.dbType + '.json (or blog-posts.json for blogs).');
+        }
+      }));
+    });
+  </script>
+
+  <!-- Admin UI Container -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6" x-data="adminDashboard">
+    
+    <!-- Login Screen -->
+    <div x-show="!isAuthenticated" class="max-w-md mx-auto py-16 text-center space-y-6">
+      <div class="card p-6 md:p-8 bg-bg-secondary border border-border-default rounded-xl">
+        <h2 class="font-heading text-xl font-bold text-text-primary mb-4">Password Required</h2>
+        <div class="space-y-4">
+          <input
+            type="password"
+            x-model="password"
+            @keyup.enter="login()"
+            placeholder="Enter admin password (hint: admin123)"
+            class="w-full bg-bg-primary border border-border-default rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-accent-blue"
+          />
+          <button
+            type="button"
+            @click="login()"
+            class="btn btn-primary w-full py-2 rounded-lg text-sm"
+          >
+            Access Dashboard
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Authenticated Dashboard -->
+    <div x-show="isAuthenticated" x-cloak class="grid grid-cols-1 lg:grid-cols-4 gap-8 my-6">
+      <!-- Sidebar database select -->
+      <div class="lg:col-span-1 space-y-4">
+        <div class="card p-4 bg-bg-secondary border border-border-default rounded-xl space-y-3">
+          <h3 class="font-heading font-bold text-sm text-text-primary uppercase tracking-wider">Select Database</h3>
+          <nav class="flex flex-col gap-1.5 text-sm">
+            <button
+              @click="dbType = 'characters'; selectedRecord = null; exportDatabase();"
+              class="w-full text-left px-3 py-2 rounded-lg font-semibold transition-colors"
+              x-bind:class="dbType === 'characters' ? 'bg-bg-elevated text-accent-blue' : 'text-text-secondary hover:bg-bg-hover hover:text-text-primary'"
+            >
+              Characters
+            </button>
+            <button
+              @click="dbType = 'anime'; selectedRecord = null; exportDatabase();"
+              class="w-full text-left px-3 py-2 rounded-lg font-semibold transition-colors"
+              x-bind:class="dbType === 'anime' ? 'bg-bg-elevated text-accent-blue' : 'text-text-secondary hover:bg-bg-hover hover:text-text-primary'"
+            >
+              Anime Series
+            </button>
+            <button
+              @click="dbType = 'lists'; selectedRecord = null; exportDatabase();"
+              class="w-full text-left px-3 py-2 rounded-lg font-semibold transition-colors"
+              x-bind:class="dbType === 'lists' ? 'bg-bg-elevated text-accent-blue' : 'text-text-secondary hover:bg-bg-hover hover:text-text-primary'"
+            >
+              Rankings & Lists
+            </button>
+            <button
+              @click="dbType = 'blogs'; selectedRecord = null; exportDatabase();"
+              class="w-full text-left px-3 py-2 rounded-lg font-semibold transition-colors"
+              x-bind:class="dbType === 'blogs' ? 'bg-bg-elevated text-accent-blue' : 'text-text-secondary hover:bg-bg-hover hover:text-text-primary'"
+            >
+              Blog Posts
+            </button>
+            <button
+              @click="dbType = 'quizzes'; selectedRecord = null; exportDatabase();"
+              class="w-full text-left px-3 py-2 rounded-lg font-semibold transition-colors"
+              x-bind:class="dbType === 'quizzes' ? 'bg-bg-elevated text-accent-blue' : 'text-text-secondary hover:bg-bg-hover hover:text-text-primary'"
+            >
+              Quizzes
+            </button>
+            <button
+              @click="dbType = 'comparisons'; selectedRecord = null; exportDatabase();"
+              class="w-full text-left px-3 py-2 rounded-lg font-semibold transition-colors"
+              x-bind:class="dbType === 'comparisons' ? 'bg-bg-elevated text-accent-blue' : 'text-text-secondary hover:bg-bg-hover hover:text-text-primary'"
+            >
+              Comparisons
+            </button>
+          </nav>
+        </div>
+
+        <!-- Export card -->
+        <div class="card p-4 bg-bg-secondary border border-border-default rounded-xl space-y-4">
+          <div>
+            <h3 class="font-heading font-bold text-sm text-text-primary uppercase tracking-wider mb-2">Export Data</h3>
+            <p class="text-xs text-text-secondary leading-relaxed">
+              Export and copy the updated JSON array, then overwrite the matching data file in your local IDE folder structure.
+            </p>
+          </div>
+          <button
+            @click="copyToClipboard()"
+            class="btn btn-primary w-full py-2.5 rounded-lg text-sm shadow-glow-blue"
+          >
+            Copy Updated JSON
+          </button>
+        </div>
+      </div>
+
+      <!-- Main workspace -->
+      <div class="lg:col-span-3 space-y-6">
+        <!-- Dashboard Header -->
+        <div class="flex items-center justify-between border-b border-border-default pb-4">
+          <h2 class="font-heading text-2xl font-black text-text-primary capitalize">
+            Database: <span class="gradient-text font-black" x-text="dbType"></span>
+          </h2>
+          <button
+            @click="selectRecord(-1)"
+            class="btn btn-primary px-4 py-2 text-xs rounded-lg shadow-glow-blue"
+          >
+            Add New Record
+          </button>
+        </div>
+
+        <!-- Edit Form -->
+        <div x-show="selectedRecord" class="card p-6 bg-bg-secondary border border-border-default rounded-xl space-y-4">
+          <h3 class="font-heading font-bold text-lg text-text-primary border-b border-border-muted pb-2">
+            <span x-text="editingIndex === -1 ? 'Create New' : 'Edit'"></span> Record
+          </h3>
+
+          <div class="space-y-4">
+            <!-- Slug -->
+            <div class="flex flex-col gap-1.5">
+              <label class="text-xs font-bold text-text-secondary uppercase">Unique Slug (lower-case, hyphenated)</label>
+              <input type="text" x-model="selectedRecord.slug" class="bg-bg-primary border border-border-muted rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-accent-blue" />
+            </div>
+
+            <!-- Generic input based on database type -->
+            <template x-if="dbType === 'characters'">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-xs font-bold text-text-secondary uppercase">Character Name</label>
+                  <input type="text" x-model="selectedRecord.name" class="bg-bg-primary border border-border-muted rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-accent-blue" />
+                </div>
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-xs font-bold text-text-secondary uppercase">Japanese Name</label>
+                  <input type="text" x-model="selectedRecord.japaneseName" class="bg-bg-primary border border-border-muted rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-accent-blue" />
+                </div>
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-xs font-bold text-text-secondary uppercase">Anime Slug</label>
+                  <input type="text" x-model="selectedRecord.anime" class="bg-bg-primary border border-border-muted rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-accent-blue" />
+                </div>
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-xs font-bold text-text-secondary uppercase">Anime Name (Label)</label>
+                  <input type="text" x-model="selectedRecord.animeName" class="bg-bg-primary border border-border-muted rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-accent-blue" />
+                </div>
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-xs font-bold text-text-secondary uppercase">Image URL</label>
+                  <input type="text" x-model="selectedRecord.image" class="bg-bg-primary border border-border-muted rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-accent-blue" />
+                </div>
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-xs font-bold text-text-secondary uppercase">Role (e.g. Protagonist / Antagonist)</label>
+                  <input type="text" x-model="selectedRecord.role" class="bg-bg-primary border border-border-muted rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-accent-blue" />
+                </div>
+              </div>
+            </template>
+
+            <template x-if="dbType === 'blogs'">
+              <div class="grid grid-cols-1 gap-4">
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-xs font-bold text-text-secondary uppercase">Article Title</label>
+                  <input type="text" x-model="selectedRecord.title" class="bg-bg-primary border border-border-muted rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-accent-blue" />
+                </div>
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-xs font-bold text-text-secondary uppercase">Excerpt Summary</label>
+                  <input type="text" x-model="selectedRecord.excerpt" class="bg-bg-primary border border-border-muted rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-accent-blue" />
+                </div>
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-xs font-bold text-text-secondary uppercase">Featured Image URL</label>
+                  <input type="text" x-model="selectedRecord.featuredImage" class="bg-bg-primary border border-border-muted rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-accent-blue" />
+                </div>
+              </div>
+            </template>
+          </div>
+
+          <div class="flex gap-3 justify-end pt-4 border-t border-border-muted">
+            <button
+              type="button"
+              @click="selectedRecord = null"
+              class="btn btn-secondary px-4 py-2 text-xs rounded-lg"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              @click="saveRecord()"
+              class="btn btn-primary px-4 py-2 text-xs rounded-lg shadow-glow-blue"
+            >
+              Save to Local Memory
+            </button>
+          </div>
+        </div>
+
+        <!-- Records List Table -->
+        <div class="card bg-bg-secondary border border-border-default rounded-xl overflow-hidden">
+          <div class="max-h-96 overflow-y-auto">
+            <table class="w-full text-left text-sm border-collapse">
+              <thead class="bg-bg-primary border-b border-border-default text-xs uppercase tracking-wider text-text-secondary">
+                <tr>
+                  <th class="px-6 py-3">Slug</th>
+                  <th class="px-6 py-3">Identifier Title</th>
+                  <th class="px-6 py-3 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-border-muted text-text-primary">
+                <template x-for="(rec, index) in records[dbType]" :key="rec.slug">
+                  <tr class="hover:bg-bg-hover/50">
+                    <td class="px-6 py-3.5 font-mono text-xs text-accent-blue font-bold" x-text="rec.slug"></td>
+                    <td class="px-6 py-3.5 font-bold" x-text="rec.name || rec.title"></td>
+                    <td class="px-6 py-3.5 text-right space-x-1">
+                      <button
+                        @click="selectRecord(index)"
+                        class="px-2.5 py-1 rounded bg-bg-elevated border border-border-muted hover:border-accent-blue text-xs text-text-secondary hover:text-text-primary transition-colors"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        @click="deleteRecord(index)"
+                        class="px-2.5 py-1 rounded bg-accent-pink/10 border border-accent-pink/20 hover:border-accent-pink text-xs text-accent-pink hover:bg-accent-pink/20 transition-colors"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- JSON Output preview -->
+        <div class="card p-4 bg-bg-secondary border border-border-default rounded-xl space-y-3">
+          <h3 class="font-heading font-bold text-sm text-text-primary uppercase tracking-wider">JSON Export Output Preview</h3>
+          <textarea
+            x-model="exportJson"
+            readonly
+            rows="8"
+            class="w-full bg-bg-primary border border-border-muted rounded-lg px-3 py-2 font-mono text-xs text-text-secondary focus:outline-none focus:ring-0"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</Layout>

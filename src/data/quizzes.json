@@ -1,0 +1,686 @@
+[
+  {
+    "slug": "which-anime-character-are-you",
+    "title": "Which Anime Character Are You?",
+    "description": "Answer 10 questions to discover which iconic anime character matches your personality!",
+    "image": "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800&q=80",
+    "questions": [
+      {
+        "question": "How do you handle conflict?",
+        "options": [
+          {
+            "text": "I charge in headfirst and figure it out!",
+            "scores": {
+              "naruto-uzumaki": 3,
+              "monkey-d-luffy": 3,
+              "goku": 2
+            }
+          },
+          {
+            "text": "I analyze the situation and create a plan",
+            "scores": {
+              "light-yagami": 3,
+              "lelouch-lamperouge": 3,
+              "l-lawliet": 2
+            }
+          },
+          {
+            "text": "I protect my loved ones at any cost",
+            "scores": {
+              "tanjiro-kamado": 3,
+              "mikasa-ackerman": 2,
+              "itachi-uchiha": 2
+            }
+          },
+          {
+            "text": "I avoid it unless absolutely necessary",
+            "scores": {
+              "mob": 3,
+              "saitama": 2,
+              "violet-evergarden": 2
+            }
+          }
+        ]
+      },
+      {
+        "question": "What motivates you most?",
+        "options": [
+          {
+            "text": "Becoming the strongest / best",
+            "scores": {
+              "goku": 3,
+              "naruto-uzumaki": 2,
+              "vegeta": 3
+            }
+          },
+          {
+            "text": "Protecting my friends and family",
+            "scores": {
+              "tanjiro-kamado": 3,
+              "mikasa-ackerman": 3,
+              "midoriya-izuku": 2
+            }
+          },
+          {
+            "text": "Understanding the world / truth",
+            "scores": {
+              "l-lawliet": 3,
+              "senku-ishigami": 3,
+              "erwin-smith": 2
+            }
+          },
+          {
+            "text": "Simple pleasures — food, comfort, fun",
+            "scores": {
+              "monkey-d-luffy": 2,
+              "saitama": 3,
+              "denji": 3
+            }
+          }
+        ]
+      },
+      {
+        "question": "Pick your ideal superpower:",
+        "options": [
+          {
+            "text": "Super strength & speed",
+            "scores": {
+              "goku": 3,
+              "saitama": 3,
+              "naruto-uzumaki": 2
+            }
+          },
+          {
+            "text": "Mind reading / telepathy",
+            "scores": {
+              "anya-forger": 3,
+              "l-lawliet": 2,
+              "mob": 2
+            }
+          },
+          {
+            "text": "Time manipulation",
+            "scores": {
+              "satoru-fujinuma": 3,
+              "lelouch-lamperouge": 2,
+              "light-yagami": 2
+            }
+          },
+          {
+            "text": "Elemental powers (fire, ice, lightning)",
+            "scores": {
+              "todoroki-shoto": 3,
+              "tanjiro-kamado": 2,
+              "killua-zoldyck": 3
+            }
+          }
+        ]
+      },
+      {
+        "question": "Your friend is in danger. What do you do?",
+        "options": [
+          {
+            "text": "Rush in immediately, think later",
+            "scores": {
+              "naruto-uzumaki": 3,
+              "midoriya-izuku": 3,
+              "monkey-d-luffy": 3
+            }
+          },
+          {
+            "text": "Assess the threat and find the optimal strategy",
+            "scores": {
+              "lelouch-lamperouge": 3,
+              "senku-ishigami": 2,
+              "erwin-smith": 3
+            }
+          },
+          {
+            "text": "Use overwhelming force to end it quickly",
+            "scores": {
+              "gojo-satoru": 3,
+              "levi-ackerman": 3,
+              "saitama": 2
+            }
+          },
+          {
+            "text": "Sacrifice myself if needed",
+            "scores": {
+              "itachi-uchiha": 3,
+              "rem": 3,
+              "vegeta": 2
+            }
+          }
+        ]
+      },
+      {
+        "question": "What's your biggest weakness?",
+        "options": [
+          {
+            "text": "I'm too trusting / naive",
+            "scores": {
+              "goku": 3,
+              "naruto-uzumaki": 3,
+              "monkey-d-luffy": 2
+            }
+          },
+          {
+            "text": "I'm too proud / arrogant",
+            "scores": {
+              "vegeta": 3,
+              "light-yagami": 3,
+              "sasuke-uchiha": 2
+            }
+          },
+          {
+            "text": "I care too much and it clouds my judgment",
+            "scores": {
+              "tanjiro-kamado": 3,
+              "mikasa-ackerman": 2,
+              "rem": 3
+            }
+          },
+          {
+            "text": "I'm socially awkward / bad with people",
+            "scores": {
+              "mob": 3,
+              "shinji-ikari": 3,
+              "l-lawliet": 2
+            }
+          }
+        ]
+      },
+      {
+        "question": "Pick your ideal weekend:",
+        "options": [
+          {
+            "text": "Training / working out",
+            "scores": {
+              "goku": 3,
+              "vegeta": 3,
+              "roronoa-zoro": 3
+            }
+          },
+          {
+            "text": "Reading / studying / gaming",
+            "scores": {
+              "l-lawliet": 3,
+              "light-yagami": 2,
+              "senku-ishigami": 3
+            }
+          },
+          {
+            "text": "Hanging out with friends / eating food",
+            "scores": {
+              "monkey-d-luffy": 3,
+              "naruto-uzumaki": 2,
+              "anya-forger": 3
+            }
+          },
+          {
+            "text": "Being alone in peace",
+            "scores": {
+              "levi-ackerman": 3,
+              "saitama": 2,
+              "spike-spiegel": 3
+            }
+          }
+        ]
+      },
+      {
+        "question": "How would others describe you?",
+        "options": [
+          {
+            "text": "Loud and energetic",
+            "scores": {
+              "naruto-uzumaki": 3,
+              "asta": 3,
+              "monkey-d-luffy": 2
+            }
+          },
+          {
+            "text": "Cool and mysterious",
+            "scores": {
+              "sasuke-uchiha": 3,
+              "levi-ackerman": 3,
+              "spike-spiegel": 2
+            }
+          },
+          {
+            "text": "Kind and empathetic",
+            "scores": {
+              "tanjiro-kamado": 3,
+              "violet-evergarden": 3,
+              "midoriya-izuku": 2
+            }
+          },
+          {
+            "text": "Genius but eccentric",
+            "scores": {
+              "l-lawliet": 3,
+              "senku-ishigami": 3,
+              "gojo-satoru": 2
+            }
+          }
+        ]
+      },
+      {
+        "question": "If you could change one thing about the world:",
+        "options": [
+          {
+            "text": "Eliminate all evil / crime",
+            "scores": {
+              "light-yagami": 3,
+              "naruto-uzumaki": 2,
+              "all-might": 3
+            }
+          },
+          {
+            "text": "Give everyone true freedom",
+            "scores": {
+              "monkey-d-luffy": 3,
+              "eren-yeager": 3,
+              "lelouch-lamperouge": 2
+            }
+          },
+          {
+            "text": "Advance technology / knowledge",
+            "scores": {
+              "senku-ishigami": 3,
+              "edward-elric": 2,
+              "l-lawliet": 2
+            }
+          },
+          {
+            "text": "Nothing — I just want a peaceful life",
+            "scores": {
+              "saitama": 3,
+              "mob": 2,
+              "denji": 3
+            }
+          }
+        ]
+      },
+      {
+        "question": "Your greatest fear:",
+        "options": [
+          {
+            "text": "Losing the people I love",
+            "scores": {
+              "naruto-uzumaki": 3,
+              "tanjiro-kamado": 3,
+              "mikasa-ackerman": 2
+            }
+          },
+          {
+            "text": "Being weak or powerless",
+            "scores": {
+              "vegeta": 3,
+              "midoriya-izuku": 2,
+              "sasuke-uchiha": 3
+            }
+          },
+          {
+            "text": "Being alone / rejected",
+            "scores": {
+              "rem": 3,
+              "shinji-ikari": 3,
+              "zero-two": 2
+            }
+          },
+          {
+            "text": "A boring life with no excitement",
+            "scores": {
+              "goku": 3,
+              "monkey-d-luffy": 3,
+              "saitama": 2
+            }
+          }
+        ]
+      },
+      {
+        "question": "Choose a quote that resonates with you:",
+        "options": [
+          {
+            "text": "I will never give up! That is my ninja way!",
+            "scores": {
+              "naruto-uzumaki": 3,
+              "midoriya-izuku": 2,
+              "asta": 2
+            }
+          },
+          {
+            "text": "The only ones who should kill are those prepared to be killed.",
+            "scores": {
+              "lelouch-lamperouge": 3,
+              "levi-ackerman": 2,
+              "light-yagami": 2
+            }
+          },
+          {
+            "text": "I want to understand what 'I love you' means.",
+            "scores": {
+              "violet-evergarden": 3,
+              "rem": 2,
+              "zero-two": 2
+            }
+          },
+          {
+            "text": "OK.",
+            "scores": {
+              "saitama": 3,
+              "mob": 2,
+              "gojo-satoru": 2
+            }
+          }
+        ]
+      }
+    ],
+    "results": [
+      {
+        "characterSlug": "naruto-uzumaki",
+        "title": "You are Naruto Uzumaki!",
+        "description": "You're determined, optimistic, and never give up! Your energy is infectious and you have the power to change hearts."
+      },
+      {
+        "characterSlug": "goku",
+        "title": "You are Goku!",
+        "description": "You're pure-hearted, love a challenge, and always push yourself to new heights. Your cheerful nature inspires everyone!"
+      },
+      {
+        "characterSlug": "light-yagami",
+        "title": "You are Light Yagami!",
+        "description": "You're brilliant, strategic, and believe you know what's best for the world. Just... don't pick up any mysterious notebooks."
+      },
+      {
+        "characterSlug": "l-lawliet",
+        "title": "You are L!",
+        "description": "You're an analytical genius with eccentric habits. Your deductive skills are unmatched, and you always seek the truth."
+      },
+      {
+        "characterSlug": "monkey-d-luffy",
+        "title": "You are Luffy!",
+        "description": "Freedom is everything to you! You live life on your own terms and your infectious optimism draws people to you."
+      },
+      {
+        "characterSlug": "tanjiro-kamado",
+        "title": "You are Tanjiro!",
+        "description": "You're incredibly kind-hearted with a strong moral compass. You see the good in everyone, even your enemies."
+      },
+      {
+        "characterSlug": "saitama",
+        "title": "You are Saitama!",
+        "description": "You're incredibly capable but often feel unchallenged. Your laid-back attitude hides immense hidden potential."
+      },
+      {
+        "characterSlug": "levi-ackerman",
+        "title": "You are Levi!",
+        "description": "You're stoic, disciplined, and exceptionally talented. Beneath your tough exterior, you deeply care about your comrades."
+      },
+      {
+        "characterSlug": "mob",
+        "title": "You are Mob!",
+        "description": "You're humble and kind, believing that powers don't define a person. You value self-improvement and genuine connections."
+      },
+      {
+        "characterSlug": "lelouch-lamperouge",
+        "title": "You are Lelouch!",
+        "description": "You're a strategic mastermind willing to sacrifice everything for your ideals. Your charisma can move nations."
+      },
+      {
+        "characterSlug": "violet-evergarden",
+        "title": "You are Violet!",
+        "description": "You're on a journey to understand emotions and human connection. Your sincerity touches everyone you meet."
+      },
+      {
+        "characterSlug": "senku-ishigami",
+        "title": "You are Senku!",
+        "description": "You believe science can solve anything! Your brilliant mind and infectious enthusiasm for knowledge inspire others."
+      }
+    ]
+  },
+  {
+    "slug": "anime-knowledge-quiz",
+    "title": "Ultimate Anime Knowledge Quiz",
+    "description": "Think you know anime? Test your knowledge with these 10 challenging questions!",
+    "image": "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=800&q=80",
+    "questions": [
+      {
+        "question": "What is Goku's Saiyan birth name?",
+        "options": [
+          {
+            "text": "Kakarot",
+            "correct": true
+          },
+          {
+            "text": "Bardock",
+            "correct": false
+          },
+          {
+            "text": "Raditz",
+            "correct": false
+          },
+          {
+            "text": "Broly",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "question": "Which anime features 'Breathing Techniques' as a combat system?",
+        "options": [
+          {
+            "text": "Jujutsu Kaisen",
+            "correct": false
+          },
+          {
+            "text": "Demon Slayer",
+            "correct": true
+          },
+          {
+            "text": "Naruto",
+            "correct": false
+          },
+          {
+            "text": "Bleach",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "question": "What is the name of Luffy's ship?",
+        "options": [
+          {
+            "text": "Going Merry",
+            "correct": false
+          },
+          {
+            "text": "Thousand Sunny",
+            "correct": true
+          },
+          {
+            "text": "Red Force",
+            "correct": false
+          },
+          {
+            "text": "Moby Dick",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "question": "Who killed Itachi Uchiha?",
+        "options": [
+          {
+            "text": "Naruto",
+            "correct": false
+          },
+          {
+            "text": "Madara",
+            "correct": false
+          },
+          {
+            "text": "He died of illness (during his fight with Sasuke)",
+            "correct": true
+          },
+          {
+            "text": "Pain",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "question": "What is Gojo Satoru's Domain Expansion called?",
+        "options": [
+          {
+            "text": "Malevolent Shrine",
+            "correct": false
+          },
+          {
+            "text": "Chimera Shadow Garden",
+            "correct": false
+          },
+          {
+            "text": "Unlimited Void",
+            "correct": true
+          },
+          {
+            "text": "Infinite Tsukuyomi",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "question": "Which anime studio animated Attack on Titan's final season?",
+        "options": [
+          {
+            "text": "Wit Studio",
+            "correct": false
+          },
+          {
+            "text": "MAPPA",
+            "correct": true
+          },
+          {
+            "text": "ufotable",
+            "correct": false
+          },
+          {
+            "text": "Bones",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "question": "What is the name of Edward Elric's brother?",
+        "options": [
+          {
+            "text": "Alexander",
+            "correct": false
+          },
+          {
+            "text": "Alphonse",
+            "correct": true
+          },
+          {
+            "text": "Armstrong",
+            "correct": false
+          },
+          {
+            "text": "Mustang",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "question": "In Death Note, what must you know to kill someone with the notebook?",
+        "options": [
+          {
+            "text": "Their name and blood type",
+            "correct": false
+          },
+          {
+            "text": "Their name and face",
+            "correct": true
+          },
+          {
+            "text": "Just their name",
+            "correct": false
+          },
+          {
+            "text": "Their name and location",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "question": "What type of Devil Fruit did Luffy eat?",
+        "options": [
+          {
+            "text": "Logia",
+            "correct": false
+          },
+          {
+            "text": "Paramecia",
+            "correct": false
+          },
+          {
+            "text": "Mythical Zoan (Hito Hito no Mi, Model: Nika)",
+            "correct": true
+          },
+          {
+            "text": "Ancient Zoan",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "question": "Which character says 'Waku Waku'?",
+        "options": [
+          {
+            "text": "Nezuko",
+            "correct": false
+          },
+          {
+            "text": "Rem",
+            "correct": false
+          },
+          {
+            "text": "Zero Two",
+            "correct": false
+          },
+          {
+            "text": "Anya Forger",
+            "correct": true
+          }
+        ]
+      }
+    ],
+    "results": [
+      {
+        "minScore": 0,
+        "maxScore": 3,
+        "title": "Anime Beginner",
+        "description": "You're just starting your anime journey! There's a whole world of amazing shows waiting for you."
+      },
+      {
+        "minScore": 4,
+        "maxScore": 6,
+        "title": "Casual Fan",
+        "description": "You know the basics! You've watched some classics and have good taste, but there's still more to explore."
+      },
+      {
+        "minScore": 7,
+        "maxScore": 8,
+        "title": "True Otaku",
+        "description": "Impressive! You clearly watch a lot of anime and pay attention to the details. Well done!"
+      },
+      {
+        "minScore": 9,
+        "maxScore": 10,
+        "title": "Anime Sensei",
+        "description": "Perfect or near-perfect! You are a true anime expert. Your knowledge is truly encyclopedic!"
+      }
+    ]
+  }
+]

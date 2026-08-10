@@ -1,0 +1,277 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import SocialShare from '../../components/SocialShare.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import characters from '../../data/characters.json';
+
+export async function getStaticPaths() {
+  return characters.map(char => ({
+    params: { slug: char.slug },
+    props: { character: char }
+  }));
+}
+
+const { character } = Astro.props;
+
+// Fetch full details of related characters if they exist in the database
+const relatedCharacters = (character.relationships || [])
+  .map(rel => {
+    const found = characters.find(c => c.slug === rel.slug);
+    if (found) {
+      return {
+        slug: found.slug,
+        name: found.name,
+        image: found.image,
+        animeName: found.animeName,
+        type: rel.type
+      };
+    }
+    return null;
+  })
+  .filter(Boolean);
+---
+
+<Layout
+  title={`${character.name} — Stats, Abilities & Profile`}
+  description={`Explore ${character.name}'s official power stats, unique abilities, transformations, character relationships, and lore FAQs from ${character.animeName}.`}
+  image={character.coverImage || character.image}
+  type="profile"
+  schemaType="Person"
+  schemaData={character}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <!-- Breadcrumbs -->
+    <Breadcrumb
+      items={[
+        { label: 'Characters', href: '/characters' },
+        { label: character.name }
+      ]}
+    />
+
+    <!-- Google Ad Slot Top -->
+    <AdSlot slot="character-profile-top" format="banner" />
+
+    <!-- Main Profile Card -->
+    <div class="card p-6 md:p-8 bg-bg-secondary border border-border-default rounded-2xl mb-8">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Character Portrait Column -->
+        <div class="col-span-1 flex flex-col items-center">
+          <div class="relative w-full max-w-[320px] aspect-[2/3] rounded-xl overflow-hidden bg-bg-primary border border-border-default shadow-glow-blue/10">
+            <img
+              src={character.image}
+              alt={character.name}
+              width="400"
+              height="600"
+              class="w-full h-full object-cover"
+              loading="eager"
+            />
+            
+            <!-- Floating Rating -->
+            <div class="absolute top-4 right-4 bg-bg-secondary/95 backdrop-blur-sm border border-border-default rounded-xl px-3.5 py-1.5 flex items-center gap-1.5 shadow-lg">
+              <svg class="w-5 h-5 text-accent-yellow fill-accent-yellow" viewBox="0 0 24 24">
+                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+              </svg>
+              <span class="text-sm font-black text-text-primary">{character.rating.toFixed(1)}</span>
+            </div>
+          </div>
+
+          <div class="w-full max-w-[320px] mt-4">
+            <SocialShare title={character.name} description={`Check out ${character.name}'s stats and abilities on AnimeCharactersList.com!`} />
+          </div>
+        </div>
+
+        <!-- Character Details Column -->
+        <div class="lg:col-span-2 space-y-6">
+          <div>
+            <div class="flex flex-wrap items-center gap-3 mb-2">
+              <span class="badge badge-blue">{character.animeName}</span>
+              <span class={`badge ${character.role.includes('Protagonist') ? 'badge-blue' : character.role.includes('Antagonist') ? 'badge-pink' : 'badge-green'}`}>
+                {character.role}
+              </span>
+              <span class="badge badge-green">{character.species}</span>
+            </div>
+            <h1 class="font-heading text-4xl md:text-5xl font-black text-text-primary leading-tight">
+              {character.name}
+            </h1>
+            {character.japaneseName && (
+              <span class="text-xl font-medium text-text-tertiary block mt-1">{character.japaneseName}</span>
+            )}
+          </div>
+
+          <!-- Description -->
+          <div class="text-text-secondary text-sm md:text-base leading-relaxed">
+            <p>{character.description}</p>
+          </div>
+
+          <!-- Quick Stats Grid -->
+          <div class="border-t border-border-default pt-6">
+            <h2 class="text-xs font-bold text-text-secondary uppercase tracking-widest mb-4">Character Profile</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div class="bg-bg-primary/50 border border-border-muted rounded-xl p-3">
+                <span class="block text-[10px] text-text-tertiary uppercase font-bold tracking-wider">Age</span>
+                <span class="text-sm font-semibold text-text-primary">{character.age || 'N/A'}</span>
+              </div>
+              <div class="bg-bg-primary/50 border border-border-muted rounded-xl p-3">
+                <span class="block text-[10px] text-text-tertiary uppercase font-bold tracking-wider">Gender</span>
+                <span class="text-sm font-semibold text-text-primary">{character.gender || 'N/A'}</span>
+              </div>
+              <div class="bg-bg-primary/50 border border-border-muted rounded-xl p-3">
+                <span class="block text-[10px] text-text-tertiary uppercase font-bold tracking-wider">Height</span>
+                <span class="text-sm font-semibold text-text-primary">{character.height || 'N/A'}</span>
+              </div>
+              <div class="bg-bg-primary/50 border border-border-muted rounded-xl p-3">
+                <span class="block text-[10px] text-text-tertiary uppercase font-bold tracking-wider">Weight</span>
+                <span class="text-sm font-semibold text-text-primary">{character.weight || 'N/A'}</span>
+              </div>
+              <div class="bg-bg-primary/50 border border-border-muted rounded-xl p-3">
+                <span class="block text-[10px] text-text-tertiary uppercase font-bold tracking-wider">Birthday</span>
+                <span class="text-sm font-semibold text-text-primary">{character.birthday || 'N/A'}</span>
+              </div>
+              <div class="bg-bg-primary/50 border border-border-muted rounded-xl p-3">
+                <span class="block text-[10px] text-text-tertiary uppercase font-bold tracking-wider">Blood Type</span>
+                <span class="text-sm font-semibold text-text-primary">{character.bloodType || 'N/A'}</span>
+              </div>
+              <div class="bg-bg-primary/50 border border-border-muted rounded-xl p-3">
+                <span class="block text-[10px] text-text-tertiary uppercase font-bold tracking-wider">Hair Color</span>
+                <span class="text-sm font-semibold text-text-primary">{character.hairColor || 'N/A'}</span>
+              </div>
+              <div class="bg-bg-primary/50 border border-border-muted rounded-xl p-3">
+                <span class="block text-[10px] text-text-tertiary uppercase font-bold tracking-wider">Eye Color</span>
+                <span class="text-sm font-semibold text-text-primary">{character.eyeColor || 'N/A'}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Voice Actors -->
+          {character.voiceActors && character.voiceActors.length > 0 && (
+            <div class="border-t border-border-default pt-6">
+              <h2 class="text-xs font-bold text-text-secondary uppercase tracking-widest mb-3">Voice Actors (Seiyuu)</h2>
+              <div class="flex flex-wrap gap-4">
+                {character.voiceActors.map((va: any) => (
+                  <div class="flex items-center gap-2 text-xs">
+                    <span class="font-bold text-text-primary">{va.name}</span>
+                    <span class="text-text-tertiary">({va.language})</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Google Ad Slot Mid -->
+    <AdSlot slot="character-profile-mid" format="auto" />
+
+    <!-- Abilities and Transformations Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+      
+      <!-- Abilities Section -->
+      <div class="card p-6 md:p-8 bg-bg-secondary border border-border-default rounded-2xl">
+        <h2 class="section-title mb-6">Combat Abilities</h2>
+        <div class="space-y-6">
+          {character.abilities && character.abilities.map((ability: any) => (
+            <div class="space-y-2">
+              <div class="flex justify-between items-center text-sm">
+                <span class="font-bold text-text-primary">{ability.name}</span>
+                <span class="font-bold text-accent-blue">{ability.power}%</span>
+              </div>
+              <div class="power-bar">
+                <div class="power-bar-fill" style={`width: ${ability.power}%`}></div>
+              </div>
+              <p class="text-xs text-text-secondary leading-relaxed">{ability.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Transformations Timeline Section -->
+      <div class="card p-6 md:p-8 bg-bg-secondary border border-border-default rounded-2xl">
+        <h2 class="section-title mb-6">Power Forms & Transformations</h2>
+        
+        {character.transformations && character.transformations.length > 0 ? (
+          <div class="relative pl-6 border-l border-border-default space-y-6">
+            {character.transformations.sort((a: any, b: any) => a.order - b.order).map((tf: any) => (
+              <div class="relative">
+                <!-- Timeline Dot -->
+                <span class="absolute -left-[31px] top-1 w-2.5 h-2.5 rounded-full bg-accent-pink border border-bg-secondary shadow-glow-pink"></span>
+                
+                <h3 class="text-sm font-bold text-text-primary mb-1">
+                  Form #{tf.order}: {tf.name}
+                </h3>
+                <p class="text-xs text-text-secondary leading-relaxed">{tf.description}</p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div class="text-center py-12 text-text-tertiary text-sm">
+            No transformations recorded for this character.
+          </div>
+        )}
+      </div>
+
+    </div>
+
+    <!-- Relationships Section -->
+    {relatedCharacters.length > 0 && (
+      <div class="card p-6 md:p-8 bg-bg-secondary border border-border-default rounded-2xl mb-8">
+        <h2 class="section-title mb-6">Key Relationships</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+          {relatedCharacters.map((rel: any) => (
+            <div class="card bg-bg-primary hover:border-accent-blue p-3 text-center flex flex-col items-center justify-between transition-all duration-300">
+              <a href={`/character/${rel.slug}`} class="block w-16 h-16 rounded-full overflow-hidden bg-bg-secondary border border-border-default mb-2">
+                <img src={rel.image} alt={rel.name} class="w-full h-full object-cover" loading="lazy" />
+              </a>
+              <div>
+                <h3 class="font-heading font-bold text-xs text-text-primary hover:text-accent-blue line-clamp-1">
+                  <a href={`/character/${rel.slug}`}>{rel.name}</a>
+                </h3>
+                <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded tracking-wide bg-bg-elevated text-text-secondary border border-border-muted inline-block mt-1">
+                  {rel.type}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- FAQ Accordion Section -->
+    {character.faq && character.faq.length > 0 && (
+      <div class="card p-6 md:p-8 bg-bg-secondary border border-border-default rounded-2xl mb-8" x-data="{ activeFaq: null }">
+        <h2 class="section-title mb-6">Frequently Asked Questions</h2>
+        <div class="space-y-4">
+          {character.faq.map((faq: any, index: number) => (
+            <div class="border border-border-default rounded-xl overflow-hidden bg-bg-primary/30">
+              <button
+                type="button"
+                class="w-full px-5 py-4 text-left font-heading font-bold text-sm text-text-primary hover:text-accent-blue flex justify-between items-center transition-colors"
+                @click={`activeFaq === ${index} ? activeFaq = null : activeFaq = ${index}`}
+              >
+                <span>{faq.question}</span>
+                <span class="text-text-secondary" x-text={`activeFaq === ${index} ? '−' : '＋'`}>＋</span>
+              </button>
+              
+              <div
+                class="px-5 pb-4 text-xs text-text-secondary leading-relaxed border-t border-border-muted pt-3"
+                x-show={`activeFaq === ${index}`}
+                x-transition:enter="transition ease-out duration-150"
+                x-transition:enter-start="opacity-0"
+                x-transition:enter-end="opacity-100"
+                x-cloak
+              >
+                {faq.answer}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- Google Ad Slot Bottom -->
+    <AdSlot slot="character-profile-bottom" format="banner" />
+  </div>
+</Layout>

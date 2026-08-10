@@ -1,0 +1,37 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="404 — Page Not Found"
+  description="Looks like you have been Isekai'd to another world. The page you are looking for does not exist on AnimeCharactersList.com."
+>
+  <div class="max-w-xl mx-auto px-4 py-20 text-center space-y-8 select-none">
+    <!-- Visual 404 Tag -->
+    <div class="relative inline-block">
+      <div class="text-[120px] font-heading font-black text-bg-secondary tracking-tight select-none leading-none">
+        404
+      </div>
+      <div class="absolute inset-0 flex items-center justify-center font-heading font-black text-3xl md:text-4xl text-text-primary uppercase tracking-widest gradient-text">
+        Isekai'd!
+      </div>
+    </div>
+
+    <!-- Error Detail -->
+    <div class="space-y-3 max-w-sm mx-auto">
+      <h1 class="font-heading text-xl md:text-2xl font-black text-text-primary">
+        You're in another world!
+      </h1>
+      <p class="text-text-secondary text-sm leading-relaxed">
+        The page you are looking for has vanished into a dimensional portal. Return back to safety using the portal button below.
+      </p>
+    </div>
+
+    <!-- Action Button -->
+    <div class="pt-4">
+      <a href="/" class="btn btn-primary px-8 py-3 rounded-xl text-sm font-semibold shadow-glow-blue">
+        Return to Homepage Portal
+      </a>
+    </div>
+  </div>
+</Layout>

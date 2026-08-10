@@ -1,0 +1,297 @@
+[
+  {
+    "slug": "naruto",
+    "title": "Naruto / Naruto Shippuden",
+    "japaneseTitle": "ナルト / ナルト疾風伝",
+    "image": "https://media.kitsu.app/anime/poster_images/1555/original.jpg",
+    "coverImage": "https://media.kitsu.app/anime/poster_images/1555/original.jpg",
+    "rating": 8.6,
+    "episodes": 720,
+    "studio": "Pierrot",
+    "status": "Completed",
+    "aired": "Oct 2002 - Mar 2017",
+    "genres": [
+      "Action",
+      "Adventure",
+      "Fantasy",
+      "Martial Arts"
+    ],
+    "synopsis": "Naruto is a landmark anime series that follows Naruto Uzumaki, a young ninja who seeks recognition from his peers and dreams of becoming the Hokage, the leader of his village. The story begins in Konohagakure (Hidden Leaf Village), where Naruto struggles with being an outcast — the village fears and shuns him because he is the host of the Nine-Tailed Fox demon, Kurama, which attacked the village on the day of his birth. Despite this adversity, Naruto maintains an irrepressible optimism and determination that gradually wins over everyone around him. The series is divided into two main parts: the original Naruto series, which follows young Naruto as a genin, and Naruto Shippuden, set two and a half years later with an older, more mature Naruto. Throughout both series, Naruto faces increasingly powerful enemies, forms deep bonds with fellow ninjas, and slowly unravels the mysteries of his birth and destiny. Central to the story is Naruto's rivalry and friendship with Sasuke Uchiha, a fellow ninja driven by vengeance. The series culminates in the Fourth Great Ninja War, where shinobi from all nations unite against a common threat. Naruto is praised for its complex character development, emotional storytelling, extensive world-building, and themes of perseverance, friendship, and redemption that have resonated with audiences worldwide for over two decades.",
+    "characters": [
+      "naruto-uzumaki",
+      "sasuke-uchiha",
+      "sakura-haruno",
+      "kakashi-hatake",
+      "itachi-uchiha",
+      "hinata-hyuga",
+      "jiraiya"
+    ],
+    "relatedAnime": [
+      "dragon-ball",
+      "one-piece",
+      "bleach"
+    ]
+  },
+  {
+    "slug": "dragon-ball",
+    "title": "Dragon Ball / Dragon Ball Z / Dragon Ball Super",
+    "japaneseTitle": "ドラゴンボール",
+    "image": "https://media.kitsu.app/anime/poster_images/800/original.jpg",
+    "coverImage": "https://media.kitsu.app/anime/poster_images/800/original.jpg",
+    "rating": 9,
+    "episodes": 639,
+    "studio": "Toei Animation",
+    "status": "Ongoing (Manga)",
+    "aired": "Feb 1986 - Present",
+    "genres": [
+      "Action",
+      "Adventure",
+      "Fantasy",
+      "Martial Arts",
+      "Comedy"
+    ],
+    "synopsis": "Dragon Ball is the franchise that defined the shonen genre and influenced virtually every action anime that followed. Created by Akira Toriyama, the series follows Son Goku from his childhood as a naive monkey-tailed boy to an adult warrior capable of battling gods. The original Dragon Ball series is a lighthearted adventure inspired by Journey to the West, following young Goku as he searches for the seven Dragon Balls alongside Bulma, Master Roshi, Krillin, and others. Dragon Ball Z shifts to a more action-oriented focus as Goku discovers his Saiyan heritage and faces increasingly powerful threats including Vegeta, Frieza, Cell, and Majin Buu. Each arc introduces higher stakes and more powerful transformations, most notably the legendary Super Saiyan form. Dragon Ball Super continues the story after Buu's defeat, introducing the concept of a multiverse with 12 separate universes, each with their own Gods of Destruction and Angels. Goku and Vegeta face divine-level threats like Beerus the Destroyer, the tyrant Frieza in his golden form, and warriors from other universes in the Tournament of Power. The series introduces transformations like Super Saiyan God, Super Saiyan Blue, Ultra Instinct, and Ultra Ego. Dragon Ball's legacy extends far beyond anime — it has influenced martial arts culture, fitness motivation, and storytelling conventions in ways few other series can match.",
+    "characters": [
+      "goku",
+      "vegeta",
+      "gohan",
+      "piccolo",
+      "frieza"
+    ],
+    "relatedAnime": [
+      "naruto",
+      "one-piece",
+      "my-hero-academia"
+    ]
+  },
+  {
+    "slug": "one-piece",
+    "title": "One Piece",
+    "japaneseTitle": "ワンピース",
+    "image": "https://media.kitsu.app/anime/poster_images/12/original.png",
+    "coverImage": "https://media.kitsu.app/anime/poster_images/12/original.png",
+    "rating": 9.1,
+    "episodes": 1100,
+    "studio": "Toei Animation",
+    "status": "Ongoing",
+    "aired": "Oct 1999 - Present",
+    "genres": [
+      "Action",
+      "Adventure",
+      "Comedy",
+      "Fantasy",
+      "Drama"
+    ],
+    "synopsis": "One Piece is the best-selling manga of all time and one of the longest-running anime series, telling the story of Monkey D. Luffy and his Straw Hat Pirates as they sail the Grand Line in search of the legendary treasure One Piece. Set in a world of vast oceans, mysterious islands, and powerful Devil Fruits that grant supernatural abilities, One Piece has built one of the most expansive and detailed fictional worlds in storytelling history. Creator Eiichiro Oda has crafted a narrative that balances epic adventure, heartfelt character development, political intrigue, and profound themes about freedom, justice, and the nature of dreams. Each member of the Straw Hat crew has their own deeply emotional backstory and personal dream, from Zoro's quest to become the greatest swordsman to Nami's desire to map the entire world. The series is renowned for its world-building, with the complex power structures of the World Government, the Yonko (Four Emperors), the Revolutionary Army, and the Marines creating a rich political landscape. The Wano arc, which adapts Japanese samurai culture, is considered one of the greatest arcs in manga history. With revelations about the Void Century, the true nature of the One Piece, and the Will of D., the series is building toward one of the most anticipated conclusions in fiction. One Piece's themes of freedom, found family, and standing up against oppression have made it a global phenomenon that transcends cultural boundaries.",
+    "characters": [
+      "monkey-d-luffy",
+      "roronoa-zoro",
+      "nami",
+      "sanji"
+    ],
+    "relatedAnime": [
+      "naruto",
+      "dragon-ball",
+      "fairy-tail"
+    ]
+  },
+  {
+    "slug": "attack-on-titan",
+    "title": "Attack on Titan",
+    "japaneseTitle": "進撃の巨人",
+    "image": "https://media.kitsu.app/anime/poster_images/7442/original.jpg",
+    "coverImage": "https://media.kitsu.app/anime/poster_images/7442/original.jpg",
+    "rating": 9.2,
+    "episodes": 94,
+    "studio": "Wit Studio / MAPPA",
+    "status": "Completed",
+    "aired": "Apr 2013 - Nov 2023",
+    "genres": [
+      "Action",
+      "Drama",
+      "Dark Fantasy",
+      "Post-Apocalyptic"
+    ],
+    "synopsis": "Attack on Titan is a dark fantasy epic that redefined the anime medium and attracted a global mainstream audience unprecedented for the genre. Set in a world where humanity lives within massive walls to protect themselves from giant humanoid creatures called Titans, the story follows Eren Yeager, Mikasa Ackerman, and Armin Arlert as they join the military to fight the Titans after the Colossal Titan breaks through Wall Maria, destroying their hometown. What begins as a survival horror story about humanity fighting monstrous creatures gradually transforms into a complex geopolitical thriller with themes of war, racism, freedom, and the cyclical nature of violence. Creator Hajime Isayama masterfully reveals layer after layer of the world's secrets — the truth about the Titans, the history of the Eldian people, the existence of civilizations beyond the walls, and the true motivations of characters who seemed like simple allies or enemies. The series is known for its shocking plot twists, morally grey characters, and refusal to provide easy answers to the questions it raises. The animation quality, particularly during action sequences involving ODM gear, set new standards for the industry. Attack on Titan's exploration of how cycles of hatred perpetuate violence, and whether true freedom is possible in a world built on suffering, has sparked deep philosophical discussions among its fanbase. Its controversial ending continues to be debated, but the series' impact on anime culture is undeniable.",
+    "characters": [
+      "levi-ackerman",
+      "eren-yeager",
+      "mikasa-ackerman",
+      "erwin-smith"
+    ],
+    "relatedAnime": [
+      "demon-slayer",
+      "jujutsu-kaisen",
+      "death-note"
+    ]
+  },
+  {
+    "slug": "death-note",
+    "title": "Death Note",
+    "japaneseTitle": "デスノート",
+    "image": "https://media.kitsu.app/anime/poster_images/1376/original.png",
+    "coverImage": "https://media.kitsu.app/anime/poster_images/1376/original.png",
+    "rating": 9,
+    "episodes": 37,
+    "studio": "Madhouse",
+    "status": "Completed",
+    "aired": "Oct 2006 - Jun 2007",
+    "genres": [
+      "Psychological",
+      "Thriller",
+      "Supernatural",
+      "Mystery"
+    ],
+    "synopsis": "Death Note is a psychological thriller that revolutionized the anime industry by proving that anime could tell mature, intellectually stimulating stories that rival the best live-action television. The series follows Light Yagami, a genius high school student who discovers a supernatural notebook that kills anyone whose name is written in it. Believing he can use this power to rid the world of criminals and create a utopia, Light begins a secret campaign of mass murder under the pseudonym 'Kira.' His activities attract the attention of L, the world's greatest detective, setting up one of fiction's greatest cat-and-mouse games. What makes Death Note exceptional is its treatment of both protagonists as equally brilliant strategic thinkers. The series becomes a chess match where each move and countermove is meticulously planned, with the stakes being nothing less than life and death. The moral questions raised by the series — Is it right to kill criminals? Does the end justify the means? Who has the right to play god? — make it a thought-provoking experience. The iconic potato chip scene, where Light devises a way to kill while under surveillance, perfectly encapsulates the series' blend of absurdity and genius. Death Note's visual style, with its dramatic lighting, intense close-ups, and symbolic imagery, creates an atmosphere of constant tension. The series remains one of the most recommended anime for newcomers to the medium.",
+    "characters": [
+      "light-yagami",
+      "l-lawliet"
+    ],
+    "relatedAnime": [
+      "code-geass",
+      "attack-on-titan"
+    ]
+  },
+  {
+    "slug": "jujutsu-kaisen",
+    "title": "Jujutsu Kaisen",
+    "japaneseTitle": "呪術廻戦",
+    "image": "https://media.kitsu.app/anime/42765/poster_image/5f099d83883544fc6200be91706d70e0.jpg",
+    "coverImage": "https://media.kitsu.app/anime/42765/poster_image/5f099d83883544fc6200be91706d70e0.jpg",
+    "rating": 8.8,
+    "episodes": 72,
+    "studio": "MAPPA",
+    "status": "Ongoing",
+    "aired": "Oct 2020 - Present",
+    "genres": [
+      "Action",
+      "Dark Fantasy",
+      "Supernatural",
+      "Horror"
+    ],
+    "synopsis": "Jujutsu Kaisen has rapidly become one of the defining anime of the 2020s, blending intense action with a dark, emotionally resonant story about sorcerers who combat cursed spirits born from humanity's negative emotions. The series follows Yuji Itadori, a high school student who becomes the host of Sukuna, the King of Curses, after swallowing one of his cursed fingers to save his friends. Enrolled at Tokyo Jujutsu High under the guidance of the impossibly powerful Gojo Satoru, Yuji must navigate a world where death is commonplace and moral lines are constantly blurred. Creator Gege Akutami has crafted a power system based on cursed energy that is both intuitive and endlessly creative — Domain Expansions, Binding Vows, and Reverse Cursed Technique create tactical depth that elevates every fight. MAPPA's animation brings these battles to life with fluid, dynamic animation that has set new industry standards. The Shibuya Incident arc marked a dramatic tonal shift, with devastating consequences that permanently changed the status quo and proved that no character was safe. The Gojo vs. Sukuna fight in the Shinjuku Showdown is considered one of the greatest battle sequences in manga history. Jujutsu Kaisen's willingness to subvert expectations, kill beloved characters, and explore the genuine horror of its world has earned it both critical acclaim and a massive global fanbase.",
+    "characters": [
+      "gojo-satoru",
+      "itadori-yuji",
+      "sukuna"
+    ],
+    "relatedAnime": [
+      "demon-slayer",
+      "chainsaw-man",
+      "attack-on-titan"
+    ]
+  },
+  {
+    "slug": "demon-slayer",
+    "title": "Demon Slayer: Kimetsu no Yaiba",
+    "japaneseTitle": "鬼滅の刃",
+    "image": "https://media.kitsu.app/anime/poster_images/41370/original.jpg",
+    "coverImage": "https://media.kitsu.app/anime/poster_images/41370/original.jpg",
+    "rating": 8.7,
+    "episodes": 55,
+    "studio": "ufotable",
+    "status": "Ongoing",
+    "aired": "Apr 2019 - Present",
+    "genres": [
+      "Action",
+      "Fantasy",
+      "Historical",
+      "Supernatural"
+    ],
+    "synopsis": "Demon Slayer: Kimetsu no Yaiba is a visually stunning anime that took the world by storm, becoming one of the highest-grossing anime franchises ever. Set in Taisho-era Japan, the story follows Tanjiro Kamado, a kind-hearted boy whose family is slaughtered by demons and whose sister Nezuko is turned into one. Tanjiro joins the Demon Slayer Corps to find a way to turn Nezuko back to human while hunting the demon responsible — Muzan Kibutsuji, the progenitor of all demons. What sets Demon Slayer apart is ufotable's breathtaking animation quality. The breathing techniques used by demon slayers are visualized as stunning water, fire, thunder, and other elemental effects that make every fight scene a visual spectacle. The Hinokami Kagura sequence in the Entertainment District arc and Muichiro's battles showcase animation quality that has raised the bar for the entire industry. The story, while following traditional shonen conventions, is elevated by its genuine emotional depth. Each demon has a tragic backstory that humanizes them, making Tanjiro's empathy for even his enemies a powerful narrative tool. The bond between Tanjiro and Nezuko is the emotional heart of the series, driving audiences to tears with its portrayal of sibling love that transcends even the boundary between human and demon. Demon Slayer's unprecedented commercial success, including the Mugen Train film becoming the highest-grossing Japanese film of all time, cemented its place in anime history.",
+    "characters": [
+      "tanjiro-kamado",
+      "nezuko-kamado"
+    ],
+    "relatedAnime": [
+      "jujutsu-kaisen",
+      "naruto",
+      "attack-on-titan"
+    ]
+  },
+  {
+    "slug": "chainsaw-man",
+    "title": "Chainsaw Man",
+    "japaneseTitle": "チェンソーマン",
+    "image": "https://media.kitsu.app/anime/43806/poster_image/cefec27a530ff9faac1b2fc238acad13.jpg",
+    "coverImage": "https://media.kitsu.app/anime/43806/poster_image/cefec27a530ff9faac1b2fc238acad13.jpg",
+    "rating": 8.5,
+    "episodes": 12,
+    "studio": "MAPPA",
+    "status": "Ongoing",
+    "aired": "Oct 2022 - Present",
+    "genres": [
+      "Action",
+      "Horror",
+      "Dark Comedy",
+      "Supernatural"
+    ],
+    "synopsis": "Chainsaw Man is a brutal, irreverent, and surprisingly emotional anime that deconstructs shonen conventions while delivering some of the most visceral action in the medium. Created by Tatsuki Fujimoto, the series follows Denji, a poverty-stricken teenager who becomes a devil-human hybrid after merging with his pet devil Pochita (the Chainsaw Devil). Working as a devil hunter for the government under the supervision of the enigmatic Makima, Denji fights devils alongside fellow hunters Power (the Blood Fiend) and Aki Hayakawa. The series stands out for its protagonist's refreshingly simple motivations — Denji doesn't want to save the world; he wants to eat good food, have a girlfriend, and live a comfortable life. This grounded characterization, combined with Fujimoto's willingness to subvert every expectation, creates a story that constantly keeps audiences off-balance. MAPPA's anime adaptation brought Fujimoto's chaotic world to life with a cinematic visual style, using real film techniques like match cuts and carefully composed shots that set it apart from typical anime. The soundtrack and ending themes, each unique to every episode, became a cultural event. Chainsaw Man's exploration of loneliness, manipulation, and what constitutes genuine human connection gives emotional weight to its otherwise anarchic narrative. The revelation of Makima's true nature as the Control Devil recontextualizes the entire story as a tragedy about a lonely boy who just wanted to be loved.",
+    "characters": [
+      "denji",
+      "power",
+      "makima"
+    ],
+    "relatedAnime": [
+      "jujutsu-kaisen",
+      "mob-psycho-100"
+    ]
+  },
+  {
+    "slug": "my-hero-academia",
+    "title": "My Hero Academia",
+    "japaneseTitle": "僕のヒーローアカデミア",
+    "image": "https://media.kitsu.app/anime/poster_images/11469/original.png",
+    "coverImage": "https://media.kitsu.app/anime/poster_images/11469/original.png",
+    "rating": 8.4,
+    "episodes": 150,
+    "studio": "Bones",
+    "status": "Completed",
+    "aired": "Apr 2016 - Oct 2025",
+    "genres": [
+      "Action",
+      "Superhero",
+      "Comedy",
+      "School"
+    ],
+    "synopsis": "My Hero Academia (Boku no Hero Academia) is a superhero anime set in a world where approximately 80% of the population possesses a superpower called a Quirk. Despite this being the norm, the series follows Izuku Midoriya, one of the rare individuals born without any Quirk, who dreams of becoming a hero like his idol All Might. When All Might recognizes Midoriya's heroic spirit, he passes on his power — One For All — making Midoriya the heir to the greatest hero lineage. The series takes place primarily at U.A. High School, where the next generation of heroes is trained, and follows Midoriya's journey alongside classmates like the explosive Bakugo, the ice-and-fire wielding Todoroki, and the gravity-defying Uraraka. Creator Kohei Horikoshi draws heavily from Western superhero comics, creating a world that feels like a Japanese interpretation of the Marvel/DC universe. The series is praised for its diverse cast of characters, each with unique and creative Quirks, and its exploration of what it truly means to be a hero. The rivalry between Midoriya and Bakugo — from bullying victim and tormentor to mutual respect and recognition — is one of the series' most well-developed relationships. The final war arc, pitting the heroes against the enhanced Shigaraki and All For One, delivered emotional payoffs that fans had been waiting years to see.",
+    "characters": [
+      "midoriya-izuku",
+      "todoroki-shoto",
+      "all-might"
+    ],
+    "relatedAnime": [
+      "naruto",
+      "dragon-ball",
+      "one-piece"
+    ]
+  },
+  {
+    "slug": "hunter-x-hunter",
+    "title": "Hunter x Hunter (2011)",
+    "japaneseTitle": "ハンター×ハンター",
+    "image": "https://media.kitsu.app/anime/poster_images/6448/original.png",
+    "coverImage": "https://media.kitsu.app/anime/poster_images/6448/original.png",
+    "rating": 9.3,
+    "episodes": 148,
+    "studio": "Madhouse",
+    "status": "Completed (2011 Anime) / Ongoing (Manga)",
+    "aired": "Oct 2011 - Sep 2014",
+    "genres": [
+      "Action",
+      "Adventure",
+      "Fantasy",
+      "Psychological"
+    ],
+    "synopsis": "Hunter x Hunter is widely regarded as one of the greatest shonen anime ever made, praised for its intricate world-building, complex characters, and willingness to subvert genre expectations at every turn. Created by Yoshihiro Togashi (also the creator of Yu Yu Hakusho), the series follows Gon Freecss, a young boy who discovers that his father Ging, whom he believed to be dead, is actually one of the world's most accomplished Hunters — licensed professionals who can track down secret treasures, rare creatures, or even individuals. Gon sets out to become a Hunter himself and find his father. The Hunter x Hunter world is one of the most detailed and well-thought-out in anime. The Nen power system, based on manipulating life energy (aura), is considered one of the best combat systems in fiction, with clearly defined rules and categories that allow for infinite creative applications. Each arc of the series feels like a different genre — the Hunter Exam is a survival thriller, the Heavens Arena is a martial arts tournament, Yorknew City is a crime thriller, Greed Island is an adventure game, and the Chimera Ant arc is a war epic with philosophical undertones. The Chimera Ant arc, in particular, is often cited as one of the greatest anime arcs ever written, exploring themes of humanity, identity, and what it means to be alive through the story of the Chimera Ant King Meruem and his relationship with the blind girl Komugi.",
+    "characters": [
+      "gon-freecss",
+      "killua-zoldyck"
+    ],
+    "relatedAnime": [
+      "naruto",
+      "one-piece",
+      "jujutsu-kaisen"
+    ]
+  }
+]

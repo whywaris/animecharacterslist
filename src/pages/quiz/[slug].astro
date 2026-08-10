@@ -1,0 +1,260 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import quizzes from '../../data/quizzes.json';
+import characters from '../../data/characters.json';
+
+export async function getStaticPaths() {
+  return quizzes.map(item => ({
+    params: { slug: item.slug },
+    props: { quiz: item }
+  }));
+}
+
+const { quiz } = Astro.props;
+
+// Enrich personality quiz results with character portraits if they exist
+const enrichedResults = quiz.results.map((res: any) => {
+  if (res.characterSlug) {
+    const char = characters.find(c => c.slug === res.characterSlug);
+    return {
+      ...res,
+      image: char ? char.image : null,
+      name: char ? char.name : null
+    };
+  }
+  return res;
+});
+
+const isPersonalityQuiz = quiz.slug === 'which-anime-character-are-you';
+---
+
+<Layout
+  title={`${quiz.title} — Play Interactive Anime Quiz`}
+  description={`${quiz.description} Solve challenging questions and check your final results instantly.`}
+  image={quiz.image}
+>
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <!-- Breadcrumb -->
+    <Breadcrumb
+      items={[
+        { label: 'Quizzes', href: '/quiz' },
+        { label: quiz.title }
+      ]}
+    />
+
+    <!-- Google Ad Slot Top -->
+    <AdSlot slot="quiz-detail-top" format="banner" />
+
+    <!-- Quiz Interactive Card Container -->
+    <div
+      class="card p-6 md:p-10 bg-bg-secondary border border-border-default rounded-2xl shadow-card"
+      x-data={`{
+        started: false,
+        finished: false,
+        currentQuestion: 0,
+        questions: ${JSON.stringify(quiz.questions)},
+        results: ${JSON.stringify(enrichedResults)},
+        isPersonality: ${isPersonalityQuiz},
+        scores: {}, // Tallies for personality
+        correctCount: 0, // Score for trivia
+        selectedOption: null,
+        resultData: null,
+        
+        startQuiz() {
+          this.started = true;
+          this.finished = false;
+          this.currentQuestion = 0;
+          this.scores = {};
+          this.correctCount = 0;
+          this.resultData = null;
+        },
+        selectOption(option) {
+          this.selectedOption = option;
+          
+          // Apply score weights
+          if (this.isPersonality) {
+            if (option.scores) {
+              for (const [char, weight] of Object.entries(option.scores)) {
+                this.scores[char] = (this.scores[char] || 0) + weight;
+              }
+            }
+          } else {
+            if (option.correct) {
+              this.correctCount++;
+            }
+          }
+          
+          // Delayed transition for click feedback
+          setTimeout(() => {
+            this.selectedOption = null;
+            if (this.currentQuestion < this.questions.length - 1) {
+              this.currentQuestion++;
+            } else {
+              this.calculateResults();
+            }
+          }, 250);
+        },
+        calculateResults() {
+          this.finished = true;
+          
+          if (this.isPersonality) {
+            // Find character with highest score tally
+            let topChar = '';
+            let maxScore = -1;
+            for (const [char, score] of Object.entries(this.scores)) {
+              if (score > maxScore) {
+                maxScore = score;
+                topChar = char;
+              }
+            }
+            
+            // Match with results
+            this.resultData = this.results.find(r => r.characterSlug === topChar) || this.results[0];
+          } else {
+            // Match trivia score with ranges
+            this.resultData = this.results.find(r => 
+              this.correctCount >= r.minScore && this.correctCount <= r.maxScore
+            ) || this.results[0];
+          }
+        },
+        getProgressWidth() {
+          return ((this.currentQuestion + 1) / this.questions.length) * 100 + '%';
+        }
+      }`}
+    >
+      
+      <!-- Start Screen -->
+      <div x-show="!started" class="text-center space-y-6">
+        <div class="aspect-video w-full max-w-xl mx-auto rounded-xl overflow-hidden bg-bg-primary border border-border-default shadow-md">
+          <img src={quiz.image} alt={quiz.title} class="w-full h-full object-cover" />
+        </div>
+        
+        <div class="space-y-3">
+          <h1 class="font-heading text-2xl md:text-4xl font-black text-text-primary leading-tight">
+            {quiz.title}
+          </h1>
+          <p class="text-text-secondary text-sm md:text-base max-w-xl mx-auto leading-relaxed">
+            {quiz.description}
+          </p>
+        </div>
+
+        <div class="pt-4">
+          <button
+            type="button"
+            @click="startQuiz()"
+            class="btn btn-primary px-8 py-3.5 rounded-xl text-base shadow-glow-pink"
+          >
+            Start Quiz Now
+          </button>
+        </div>
+      </div>
+
+      <!-- Question Screen -->
+      <div x-show="started && !finished" x-cloak class="space-y-6">
+        <!-- Progress Bar and counter -->
+        <div class="space-y-2">
+          <div class="flex items-center justify-between text-xs text-text-secondary uppercase tracking-widest font-bold">
+            <span>Question <span x-text="currentQuestion + 1" class="text-text-primary"></span> of <span x-text="questions.length"></span></span>
+            <span x-text="getProgressWidth()"></span>
+          </div>
+          <div class="w-full bg-bg-primary h-2 rounded-full overflow-hidden border border-border-default">
+            <div class="bg-gradient-to-r from-accent-blue to-accent-pink h-full rounded-full transition-all duration-300" x-bind:style="{ width: getProgressWidth() }"></div>
+          </div>
+        </div>
+
+        <!-- Question text -->
+        <div class="bg-bg-primary/40 border border-border-muted rounded-xl p-5 md:p-8 text-center my-6">
+          <h2 class="font-heading text-lg md:text-xl font-bold text-text-primary" x-text="questions[currentQuestion].question"></h2>
+        </div>
+
+        <!-- Options list -->
+        <div class="grid grid-cols-1 gap-3.5">
+          <template x-for="(opt, index) in questions[currentQuestion].options" :key="index">
+            <button
+              type="button"
+              @click="selectOption(opt)"
+              class="w-full text-left px-5 py-4 bg-bg-primary/70 border border-border-default hover:border-accent-blue hover:bg-bg-hover rounded-xl text-sm font-semibold text-text-primary transition-all duration-150 flex items-center justify-between"
+              x-bind:class="{
+                'border-accent-blue bg-bg-hover ring-1 ring-accent-blue shadow-glow-blue/10': selectedOption === opt
+              }"
+            >
+              <span x-text="opt.text"></span>
+              <span class="text-text-tertiary select-none group-hover:text-accent-blue">&rarr;</span>
+            </button>
+          </template>
+        </div>
+      </div>
+
+      <!-- Result Screen -->
+      <div x-show="finished" x-cloak class="text-center space-y-6">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-bg-primary border border-border-default text-xs font-semibold text-accent-pink shadow-glow-pink">
+          <span class="w-2 h-2 rounded-full bg-accent-pink animate-pulse"></span>
+          QUIZ COMPLETED
+        </div>
+
+        <!-- Result title and text -->
+        <div class="space-y-4 max-w-xl mx-auto">
+          <h2 class="font-heading text-3xl md:text-4xl font-black text-text-primary leading-tight">
+            <span x-text="resultData ? resultData.title : ''"></span>
+          </h2>
+          
+          <!-- Trivia Score display -->
+          <template x-if="!isPersonality">
+            <div class="text-lg font-bold text-accent-blue">
+              Your Score: <span x-text="correctCount"></span> / <span x-text="questions.length"></span> Correct
+            </div>
+          </template>
+
+          <p class="text-text-secondary text-sm md:text-base leading-relaxed" x-text="resultData ? resultData.description : ''"></p>
+        </div>
+
+        <!-- Personality Match Character Portrait -->
+        <template x-if="isPersonality && resultData && resultData.image">
+          <div class="flex flex-col items-center gap-3 py-4">
+            <div class="w-32 h-44 rounded-xl overflow-hidden bg-bg-primary border border-border-default shadow-lg">
+              <img x-bind:src="resultData.image" alt="" class="w-full h-full object-cover" />
+            </div>
+            <a x-bind:href="`/character/` + resultData.characterSlug" class="btn btn-secondary px-4 py-2 text-xs rounded-lg hover:border-accent-blue">
+              View <span x-text="resultData.name"></span> Profile &rarr;
+            </a>
+          </div>
+        </template>
+
+        <!-- Actions -->
+        <div class="flex flex-col sm:flex-row gap-3 justify-center pt-6 border-t border-border-muted max-w-md mx-auto">
+          <button
+            type="button"
+            @click="startQuiz()"
+            class="btn btn-primary px-6 py-2.5 rounded-lg text-sm flex-grow shadow-glow-pink"
+          >
+            Play Again
+          </button>
+          
+          <a href="/quiz" class="btn btn-secondary px-6 py-2.5 rounded-lg text-sm text-center">
+            Other Quizzes
+          </a>
+        </div>
+
+        <!-- Sharing result on Twitter -->
+        <div class="pt-4 text-xs text-text-tertiary">
+          <a
+            href=""
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hover:underline font-bold text-accent-blue"
+            x-bind:href="`https://twitter.com/intent/tweet?text=${encodeURIComponent('I got \\'' + (resultData ? resultData.title : '') + '\\' on the ' + quiz.title + '!')}&url=${encodeURIComponent(window.location.href)}`"
+          >
+            Share your score on Twitter/X &rarr;
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Google Ad Slot Bottom -->
+    <AdSlot slot="quiz-detail-bottom" format="banner" />
+  </div>
+</Layout>

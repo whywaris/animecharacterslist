@@ -1,0 +1,202 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import SocialShare from '../../components/SocialShare.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import comparisons from '../../data/comparisons.json';
+import characters from '../../data/characters.json';
+
+export async function getStaticPaths() {
+  return comparisons.map(item => ({
+    params: { slug: item.slug },
+    props: { matchup: item }
+  }));
+}
+
+const { matchup } = Astro.props;
+
+// Fetch full character data for the matchup
+const char1 = characters.find(c => c.slug === matchup.character1);
+const char2 = characters.find(c => c.slug === matchup.character2);
+
+const wChar = characters.find(c => c.slug === matchup.winner);
+const winnerName = wChar ? wChar.name : 'Tie';
+---
+
+<Layout
+  title={matchup.title}
+  description={matchup.description}
+  image={char1?.coverImage || char1?.image}
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <!-- Breadcrumb -->
+    <Breadcrumb
+      items={[
+        { label: 'Compare', href: '/comparison' },
+        { label: `${char1?.name || 'Fighter 1'} vs ${char2?.name || 'Fighter 2'}` }
+      ]}
+    />
+
+    <!-- Google Ad Slot Top -->
+    <AdSlot slot="compare-detail-top" format="banner" />
+
+    <!-- Matchup Report Card -->
+    <div class="card p-6 md:p-10 bg-bg-secondary border border-border-default rounded-2xl mb-8 relative">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-bg-primary border border-border-default text-xs font-semibold text-accent-blue shadow-glow-blue select-none mb-6">
+        <span class="w-2 h-2 rounded-full bg-accent-blue animate-pulse"></span>
+        Official Combat Matchup Analysis
+      </div>
+
+      <div class="text-center space-y-4 mb-8">
+        <h1 class="font-heading text-3xl md:text-5xl font-black text-text-primary leading-tight">
+          {matchup.title}
+        </h1>
+        <p class="text-text-secondary text-sm md:text-base max-w-xl mx-auto">
+          {matchup.description}
+        </p>
+      </div>
+
+      <!-- Portraits Side-by-Side -->
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-6 items-center border-y border-border-muted py-8 my-6">
+        <!-- Fighter 1 -->
+        <div class="md:col-span-2 flex flex-col items-center gap-2">
+          {char1 ? (
+            <div class="w-32 h-48 rounded-xl overflow-hidden bg-bg-primary border border-border-default shadow-md">
+              <img src={char1.image} alt={char1.name} class="w-full h-full object-cover" loading="eager" />
+            </div>
+          ) : (
+            <div class="w-32 h-48 rounded-xl bg-bg-primary border border-dashed border-border-default flex items-center justify-center text-xs text-text-tertiary">
+              No Portrait
+            </div>
+          )}
+          <h3 class="font-heading font-bold text-base text-text-primary">{char1?.name || matchup.character1}</h3>
+          <span class="text-xs text-text-secondary">{char1?.animeName}</span>
+        </div>
+
+        <!-- Central VS -->
+        <div class="col-span-2 md:col-span-1 text-center select-none">
+          <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-accent-blue to-accent-pink flex items-center justify-center font-heading font-black text-sm text-white shadow-glow-blue mx-auto">
+            VS
+          </div>
+        </div>
+
+        <!-- Fighter 2 -->
+        <div class="md:col-span-2 flex flex-col items-center gap-2">
+          {char2 ? (
+            <div class="w-32 h-48 rounded-xl overflow-hidden bg-bg-primary border border-border-default shadow-md">
+              <img src={char2.image} alt={char2.name} class="w-full h-full object-cover" loading="eager" />
+            </div>
+          ) : (
+            <div class="w-32 h-48 rounded-xl bg-bg-primary border border-dashed border-border-default flex items-center justify-center text-xs text-text-tertiary">
+              No Portrait
+            </div>
+          )}
+          <h3 class="font-heading font-bold text-base text-text-primary">{char2?.name || matchup.character2}</h3>
+          <span class="text-xs text-text-secondary">{char2?.animeName}</span>
+        </div>
+      </div>
+
+      <!-- Mid-panel Ad Slot -->
+      <AdSlot slot="compare-detail-mid" format="auto" />
+
+      <!-- Head-to-Head Stats -->
+      <div class="max-w-2xl mx-auto space-y-5 bg-bg-primary/30 border border-border-muted p-6 rounded-xl my-8">
+        <h3 class="text-center font-heading font-bold text-base text-text-primary border-b border-border-muted pb-3 uppercase tracking-wider">
+          Combat Parameter Comparison
+        </h3>
+
+        <!-- Power -->
+        <div class="space-y-1.5">
+          <div class="flex justify-between text-xs font-semibold">
+            <span class="text-accent-blue font-bold">{matchup.stats.power.char1}%</span>
+            <span class="text-text-tertiary uppercase tracking-wider">Attack Power</span>
+            <span class="text-accent-pink font-bold">{matchup.stats.power.char2}%</span>
+          </div>
+          <div class="flex h-2 bg-bg-elevated rounded-full overflow-hidden border border-border-muted">
+            <div class="bg-accent-blue h-full" style={`width: ${matchup.stats.power.char1 / 2}%`}></div>
+            <div class="bg-accent-pink h-full ml-auto" style={`width: ${matchup.stats.power.char2 / 2}%`}></div>
+          </div>
+        </div>
+
+        <!-- Speed -->
+        <div class="space-y-1.5">
+          <div class="flex justify-between text-xs font-semibold">
+            <span class="text-accent-blue font-bold">{matchup.stats.speed.char1}%</span>
+            <span class="text-text-tertiary uppercase tracking-wider">Movement Speed</span>
+            <span class="text-accent-pink font-bold">{matchup.stats.speed.char2}%</span>
+          </div>
+          <div class="flex h-2 bg-bg-elevated rounded-full overflow-hidden border border-border-muted">
+            <div class="bg-accent-blue h-full" style={`width: ${matchup.stats.speed.char1 / 2}%`}></div>
+            <div class="bg-accent-pink h-full ml-auto" style={`width: ${matchup.stats.speed.char2 / 2}%`}></div>
+          </div>
+        </div>
+
+        <!-- Durability -->
+        <div class="space-y-1.5">
+          <div class="flex justify-between text-xs font-semibold">
+            <span class="text-accent-blue font-bold">{matchup.stats.durability.char1}%</span>
+            <span class="text-text-tertiary uppercase tracking-wider">Durability & Armor</span>
+            <span class="text-accent-pink font-bold">{matchup.stats.durability.char2}%</span>
+          </div>
+          <div class="flex h-2 bg-bg-elevated rounded-full overflow-hidden border border-border-muted">
+            <div class="bg-accent-blue h-full" style={`width: ${matchup.stats.durability.char1 / 2}%`}></div>
+            <div class="bg-accent-pink h-full ml-auto" style={`width: ${matchup.stats.durability.char2 / 2}%`}></div>
+          </div>
+        </div>
+
+        <!-- Intelligence -->
+        <div class="space-y-1.5">
+          <div class="flex justify-between text-xs font-semibold">
+            <span class="text-accent-blue font-bold">{matchup.stats.intelligence.char1}%</span>
+            <span class="text-text-tertiary uppercase tracking-wider">Tactical IQ</span>
+            <span class="text-accent-pink font-bold">{matchup.stats.intelligence.char2}%</span>
+          </div>
+          <div class="flex h-2 bg-bg-elevated rounded-full overflow-hidden border border-border-muted">
+            <div class="bg-accent-blue h-full" style={`width: ${matchup.stats.intelligence.char1 / 2}%`}></div>
+            <div class="bg-accent-pink h-full ml-auto" style={`width: ${matchup.stats.intelligence.char2 / 2}%`}></div>
+          </div>
+        </div>
+
+        <!-- Versatility -->
+        <div class="space-y-1.5">
+          <div class="flex justify-between text-xs font-semibold">
+            <span class="text-accent-blue font-bold">{matchup.stats.versatility.char1}%</span>
+            <span class="text-text-tertiary uppercase tracking-wider">Combat Versatility</span>
+            <span class="text-accent-pink font-bold">{matchup.stats.versatility.char2}%</span>
+          </div>
+          <div class="flex h-2 bg-bg-elevated rounded-full overflow-hidden border border-border-muted">
+            <div class="bg-accent-blue h-full" style={`width: ${matchup.stats.versatility.char1 / 2}%`}></div>
+            <div class="bg-accent-pink h-full ml-auto" style={`width: ${matchup.stats.versatility.char2 / 2}%`}></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Winner Announcement Badge -->
+      <div class="bg-bg-primary/50 border border-border-default rounded-xl p-5 text-center my-6">
+        <span class="text-xs font-bold text-accent-pink uppercase tracking-widest block mb-1">Combat Winner Verdict</span>
+        <strong class="font-heading text-2xl font-black gradient-text">
+          {winnerName}
+        </strong>
+      </div>
+
+      <!-- Editorial Report Text -->
+      <div class="space-y-3 pt-4 border-t border-border-muted">
+        <h3 class="font-heading font-bold text-lg text-text-primary mb-2">
+          Editorial Combat Report
+        </h3>
+        <p class="text-text-secondary text-sm md:text-base leading-relaxed">
+          {matchup.analysis}
+        </p>
+      </div>
+
+      <!-- Share matchup -->
+      <div class="pt-6 mt-8 border-t border-border-muted">
+        <SocialShare title={matchup.title} description={matchup.description} />
+      </div>
+
+    </div>
+
+    <!-- Google Ad Slot Bottom -->
+    <AdSlot slot="compare-detail-bottom" format="banner" />
+  </div>
+</Layout>

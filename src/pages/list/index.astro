@@ -1,0 +1,74 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import lists from '../../data/lists.json';
+---
+
+<Layout
+  title="Anime Rankings & Top Character Lists"
+  description="Explore our collection of curated anime character rankings, top lists, and power comparisons. Find out who is the strongest, who are the best villains, and more."
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <!-- Breadcrumb -->
+    <Breadcrumb items={[{ label: 'Rankings' }]} />
+
+    <div class="text-left mb-8">
+      <h1 class="text-text-primary text-3xl md:text-5xl font-extrabold tracking-tight leading-none mb-3">
+        Anime <span class="gradient-text font-black">Rankings & Top Lists</span>
+      </h1>
+      <p class="text-text-secondary text-sm md:text-base max-w-2xl">
+        Review curated comparisons and definitive rankings of the strongest, most popular, and best-written characters in anime history.
+      </p>
+    </div>
+
+    <!-- Google Ad Slot Top -->
+    <AdSlot slot="lists-index-top" format="banner" />
+
+    <!-- Grid of Lists -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 my-8">
+      {lists.map(list => (
+        <div class="card group p-5 bg-bg-secondary hover:border-accent-purple hover:shadow-card-hover transition-all duration-300 flex flex-col justify-between">
+          <div>
+            <!-- List Image -->
+            <div class="aspect-video w-full rounded-xl overflow-hidden mb-4 bg-bg-primary border border-border-default">
+              <img
+                src={list.image}
+                alt={list.title}
+                width="1200"
+                height="600"
+                class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300"
+                loading="lazy"
+              />
+            </div>
+            
+            <!-- Category and Entry counts -->
+            <div class="flex items-center justify-between mb-3">
+              <span class="badge badge-pink">{list.category}</span>
+              <span class="text-xs text-text-tertiary font-bold">{list.entries.length} Entries</span>
+            </div>
+
+            <!-- Title & Description -->
+            <h2 class="font-heading text-xl font-bold text-text-primary group-hover:text-accent-purple transition-colors mb-2">
+              <a href={`/list/${list.slug}`}>{list.title}</a>
+            </h2>
+            <p class="text-text-secondary text-sm leading-relaxed mb-4">
+              {list.description}
+            </p>
+          </div>
+
+          <!-- Footer Link -->
+          <div class="pt-4 border-t border-border-muted flex items-center justify-between mt-auto">
+            <span class="text-xs text-text-tertiary font-semibold">Definitive Review</span>
+            <a href={`/list/${list.slug}`} class="text-xs text-accent-purple font-bold hover:underline">
+              View Rankings &rarr;
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Bottom Ad Slot -->
+    <AdSlot slot="lists-index-bottom" format="banner" />
+  </div>
+</Layout>

@@ -1,0 +1,158 @@
+---
+import characters from '../data/characters.json';
+import anime from '../data/anime.json';
+import lists from '../data/lists.json';
+import blogPosts from '../data/blog-posts.json';
+
+// Build a super compact search index at build time
+const searchIndex = [
+  ...characters.map(c => ({
+    type: 'character',
+    name: c.name,
+    sub: c.animeName,
+    slug: `/character/${c.slug}`,
+    image: c.image,
+    rating: c.rating
+  })),
+  ...anime.map(a => ({
+    type: 'anime',
+    name: a.title,
+    sub: a.japaneseTitle || 'Anime Series',
+    slug: `/anime/${a.slug}`,
+    image: a.image,
+    rating: a.rating
+  })),
+  ...lists.map(l => ({
+    type: 'list',
+    name: l.title,
+    sub: l.category,
+    slug: `/list/${l.slug}`,
+    image: l.image,
+    rating: null
+  })),
+  ...blogPosts.map(p => ({
+    type: 'blog',
+    name: p.title,
+    sub: 'Article',
+    slug: `/blog/${p.slug}`,
+    image: p.featuredImage,
+    rating: null
+  }))
+];
+---
+
+<div
+  class="relative w-full max-w-2xl mx-auto"
+  x-data={`{
+    query: '',
+    items: ${JSON.stringify(searchIndex)},
+    results: [],
+    isOpen: false,
+    activeIndex: -1,
+    search() {
+      if (this.query.trim() === '') {
+        this.results = [];
+        this.isOpen = false;
+        return;
+      }
+      const q = this.query.toLowerCase();
+      this.results = this.items.filter(item => 
+        item.name.toLowerCase().includes(q) || 
+        item.sub.toLowerCase().includes(q)
+      ).slice(0, 7);
+      this.isOpen = this.results.length > 0;
+      this.activeIndex = -1;
+    },
+    selectNext() {
+      if (this.results.length === 0) return;
+      this.activeIndex = (this.activeIndex + 1) % this.results.length;
+    },
+    selectPrev() {
+      if (this.results.length === 0) return;
+      this.activeIndex = (this.activeIndex - 1 + this.results.length) % this.results.length;
+    },
+    go() {
+      if (this.activeIndex >= 0 && this.activeIndex < this.results.length) {
+        window.location.href = this.results[this.activeIndex].slug;
+      } else if (this.results.length > 0) {
+        window.location.href = this.results[0].slug;
+      }
+    }
+  }`}
+>
+  <!-- Search Input Container -->
+  <div class="relative flex items-center">
+    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-text-tertiary">
+      <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.637 10.637z" />
+      </svg>
+    </div>
+    <input
+      type="text"
+      class="block w-full bg-bg-secondary/90 border border-border-default hover:border-accent-blue/50 focus:border-accent-blue focus:ring-1 focus:ring-accent-blue rounded-xl pl-11 pr-4 py-3.5 text-base text-text-primary placeholder-text-secondary shadow-glow-blue/5 transition-all duration-200"
+      placeholder="Search 100+ characters, anime, rankings, and blogs..."
+      x-model="query"
+      @input="search()"
+      @keydown.down.prevent="selectNext()"
+      @keydown.up.prevent="selectPrev()"
+      @keydown.enter.prevent="go()"
+      @focus="isOpen = results.length > 0"
+      @click.away="isOpen = false"
+    />
+  </div>
+
+  <!-- Search Results Dropdown -->
+  <div
+    class="absolute z-dropdown mt-2 w-full glass border border-border-default rounded-xl shadow-card overflow-hidden"
+    x-show="isOpen"
+    x-transition:enter="transition ease-out duration-150"
+    x-transition:enter-start="opacity-0 transform translate-y-1"
+    x-transition:enter-end="opacity-100 transform translate-y-0"
+    x-transition:leave="transition ease-in duration-100"
+    x-transition:leave-start="opacity-100 transform translate-y-0"
+    x-transition:leave-end="opacity-0 transform translate-y-1"
+    x-cloak
+  >
+    <div class="max-h-96 overflow-y-auto divide-y divide-border-muted">
+      <template x-for="(item, index) in results" :key="item.slug">
+        <a
+          :href="item.slug"
+          class="flex items-center gap-3 px-4 py-3 text-sm hover:bg-bg-hover transition-colors duration-150"
+          :class="activeIndex === index ? 'bg-bg-hover text-accent-blue' : 'text-text-primary'"
+        >
+          <img
+            :src="item.image"
+            alt=""
+            width="40"
+            height="40"
+            class="w-10 h-10 object-cover rounded-lg bg-bg-primary flex-shrink-0"
+          />
+          <div class="flex-grow min-w-0">
+            <div class="font-semibold truncate" x-text="item.name"></div>
+            <div class="text-xs text-text-secondary truncate" x-text="item.sub"></div>
+          </div>
+          <div class="flex items-center gap-1.5 flex-shrink-0">
+            <!-- Type badge -->
+            <span
+              class="text-[9px] font-extrabold uppercase px-2 py-0.5 rounded tracking-widest text-white border"
+              :class="{
+                'bg-accent-blue/10 text-accent-blue border-accent-blue/30': item.type === 'character',
+                'bg-accent-orange/10 text-accent-orange border-accent-orange/30': item.type === 'anime',
+                'bg-accent-purple/10 text-accent-purple border-accent-purple/30': item.type === 'list',
+                'bg-accent-green/10 text-accent-green border-accent-green/30': item.type === 'blog'
+              }"
+              x-text="item.type"
+            ></span>
+            
+            <!-- Rating if exists -->
+            <template x-if="item.rating">
+              <span class="flex items-center gap-0.5 text-xs text-accent-yellow font-bold">
+                ★ <span x-text="item.rating.toFixed(1)"></span>
+              </span>
+            </template>
+          </div>
+        </a>
+      </template>
+    </div>
+  </div>
+</div>

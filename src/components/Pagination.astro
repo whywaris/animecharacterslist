@@ -1,0 +1,136 @@
+---
+interface Props {
+  currentPage: number;
+  totalPages: number;
+  prevUrl: string | undefined;
+  nextUrl: string | undefined;
+  baseUrl: string;
+}
+
+const { currentPage, totalPages, prevUrl, nextUrl, baseUrl } = Astro.props;
+
+// Generate array of page numbers to show
+const pages = [];
+const maxVisiblePages = 5;
+
+let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+if (endPage - startPage + 1 < maxVisiblePages) {
+  startPage = Math.max(1, endPage - maxVisiblePages + 1);
+}
+
+for (let i = startPage; i <= endPage; i++) {
+  pages.push(i);
+}
+
+// Function to construct link URL safely
+const getPageUrl = (pageNumber: number) => {
+  if (pageNumber === 1) return baseUrl;
+  // If baseUrl ends with a slash, adjust
+  const cleanBase = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+  return `${cleanBase}/${pageNumber}`;
+};
+---
+
+{totalPages > 1 && (
+  <nav aria-label="Pagination" class="flex items-center justify-center gap-1.5 my-12">
+    <!-- Previous Button -->
+    {prevUrl ? (
+      <a
+        href={prevUrl}
+        class="btn btn-secondary p-2.5 rounded-lg text-text-secondary hover:text-text-primary hover:border-accent-blue"
+        aria-label="Previous Page"
+      >
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+        </svg>
+      </a>
+    ) : (
+      <span
+        class="p-2.5 rounded-lg text-text-tertiary bg-bg-secondary/40 border border-border-muted cursor-not-allowed select-none"
+        aria-hidden="true"
+      >
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+        </svg>
+      </span>
+    )}
+
+    <!-- First Page (if not visible in range) -->
+    {startPage > 1 && (
+      <>
+        <a
+          href={getPageUrl(1)}
+          class="btn btn-secondary px-3.5 py-2 text-sm rounded-lg hover:border-accent-blue"
+        >
+          1
+        </a>
+        {startPage > 2 && (
+          <span class="px-2 text-text-tertiary select-none" aria-hidden="true">
+            ...
+          </span>
+        )}
+      </>
+    )}
+
+    <!-- Visible Page Numbers -->
+    {pages.map((p) => {
+      const isCurrent = p === currentPage;
+      return isCurrent ? (
+        <span
+          class="btn btn-primary px-3.5 py-2 text-sm rounded-lg cursor-default select-none shadow-glow-blue"
+          aria-current="page"
+        >
+          {p}
+        </span>
+      ) : (
+        <a
+          href={getPageUrl(p)}
+          class="btn btn-secondary px-3.5 py-2 text-sm rounded-lg hover:border-accent-blue text-text-secondary hover:text-text-primary"
+        >
+          {p}
+        </a>
+      );
+    })}
+
+    <!-- Last Page (if not visible in range) -->
+    {endPage < totalPages && (
+      <>
+        {endPage < totalPages - 1 && (
+          <span class="px-2 text-text-tertiary select-none" aria-hidden="true">
+            ...
+          </span>
+        )}
+        <a
+          href={getPageUrl(totalPages)}
+          class="btn btn-secondary px-3.5 py-2 text-sm rounded-lg hover:border-accent-blue"
+        >
+          {totalPages}
+        </a>
+      </>
+    )}
+
+    <!-- Next Button -->
+    {nextUrl ? (
+      <a
+        href={nextUrl}
+        class="btn btn-secondary p-2.5 rounded-lg text-text-secondary hover:text-text-primary hover:border-accent-blue"
+        aria-label="Next Page"
+      >
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+        </svg>
+      </a>
+    ) : (
+      <span
+        class="p-2.5 rounded-lg text-text-tertiary bg-bg-secondary/40 border border-border-muted cursor-not-allowed select-none"
+        aria-hidden="true"
+      >
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+        </svg>
+      </span>
+    )}
+  </nav>
+)}

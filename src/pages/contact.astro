@@ -1,0 +1,159 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import AdSlot from '../components/AdSlot.astro';
+---
+
+<Layout
+  title="Contact Us — AnimeCharactersList"
+  description="Have feedback, suggestions, or want to request character additions? Contact the AnimeCharactersList.com editorial team."
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <!-- Breadcrumb -->
+    <Breadcrumb items={[{ label: 'Contact' }]} />
+
+    <div class="text-left mb-8">
+      <h1 class="text-text-primary text-3xl md:text-5xl font-extrabold tracking-tight leading-none mb-3">
+        Contact <span class="gradient-text font-black">Our Team</span>
+      </h1>
+      <p class="text-text-secondary text-sm md:text-base max-w-2xl">
+        We would love to hear from you. Send us your feedback, character suggestions, or business inquiries.
+      </p>
+    </div>
+
+    <!-- Ad Slot Top -->
+    <AdSlot slot="contact-top" format="banner" />
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 my-8">
+      <!-- Info Column -->
+      <div class="col-span-1 space-y-6">
+        <div class="card p-5 bg-bg-secondary border border-border-default rounded-xl space-y-4">
+          <h2 class="font-heading font-bold text-lg text-text-primary">Contact Info</h2>
+          <div class="space-y-3 text-sm text-text-secondary">
+            <div class="flex items-center gap-2.5">
+              <svg class="w-4 h-4 text-accent-blue" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+              </svg>
+              <span>support@animecharacterslist.com</span>
+            </div>
+            <div class="flex items-center gap-2.5">
+              <svg class="w-4 h-4 text-accent-pink" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>Response time: ~24 Hours</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card p-5 bg-bg-secondary border border-border-default rounded-xl space-y-4">
+          <h2 class="font-heading font-bold text-lg text-text-primary">Requests</h2>
+          <p class="text-xs text-text-secondary leading-relaxed">
+            Please specify character names and their respective series when submitting new profile additions. We update our databases weekly.
+          </p>
+        </div>
+      </div>
+
+      <!-- Form Column -->
+      <div class="md:col-span-2">
+        <div
+          class="card p-6 md:p-8 bg-bg-secondary border border-border-default rounded-2xl"
+          x-data="{
+            name: '',
+            email: '',
+            subject: 'general',
+            message: '',
+            sent: false,
+            submitForm() {
+              if (this.name && this.email && this.message) {
+                this.sent = true;
+                this.name = '';
+                this.email = '';
+                this.message = '';
+              }
+            }
+          }"
+        >
+          <!-- Success State -->
+          <div x-show="sent" x-cloak class="text-center py-12 space-y-4">
+            <div class="w-12 h-12 rounded-full bg-accent-green/20 text-accent-green flex items-center justify-center mx-auto text-xl font-bold">
+              ✓
+            </div>
+            <h3 class="font-heading font-bold text-xl text-text-primary">Message Sent Successfully</h3>
+            <p class="text-text-secondary text-sm max-w-sm mx-auto">
+              Thank you for contacting us! Our team will review your message and reply back shortly.
+            </p>
+            <button type="button" @click="sent = false" class="btn btn-secondary px-4 py-2 text-xs rounded-lg mt-4">
+              Send Another Message
+            </button>
+          </div>
+
+          <!-- Form State -->
+          <form x-show="!sent" @submit.prevent="submitForm()" class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="flex flex-col gap-1.5">
+                <label for="contact-name" class="text-xs font-bold text-text-secondary uppercase tracking-wider">Your Name</label>
+                <input
+                  id="contact-name"
+                  type="text"
+                  x-model="name"
+                  required
+                  placeholder="Enter name"
+                  class="bg-bg-primary border border-border-default rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-accent-blue placeholder-text-tertiary"
+                />
+              </div>
+              <div class="flex flex-col gap-1.5">
+                <label for="contact-email" class="text-xs font-bold text-text-secondary uppercase tracking-wider">Your Email</label>
+                <input
+                  id="contact-email"
+                  type="email"
+                  x-model="email"
+                  required
+                  placeholder="Enter email"
+                  class="bg-bg-primary border border-border-default rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-accent-blue placeholder-text-tertiary"
+                />
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label for="contact-subject" class="text-xs font-bold text-text-secondary uppercase tracking-wider">Inquiry Type</label>
+              <select
+                id="contact-subject"
+                x-model="subject"
+                class="bg-bg-primary border border-border-default rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-accent-blue cursor-pointer"
+              >
+                <option value="general">General Inquiry</option>
+                <option value="suggestion">Character Suggestion</option>
+                <option value="report">Correction / Bug Report</option>
+                <option value="business">Business / Ads Placement</option>
+              </select>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label for="contact-message" class="text-xs font-bold text-text-secondary uppercase tracking-wider">Your Message</label>
+              <textarea
+                id="contact-message"
+                x-model="message"
+                required
+                rows="5"
+                placeholder="Write your message here..."
+                class="bg-bg-primary border border-border-default rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-accent-blue placeholder-text-tertiary resize-none"
+              ></textarea>
+            </div>
+
+            <div class="pt-2">
+              <button
+                type="submit"
+                class="btn btn-primary w-full py-2.5 rounded-lg font-semibold text-sm shadow-glow-blue"
+              >
+                Send Message
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ad Slot Bottom -->
+    <AdSlot slot="contact-bottom" format="banner" />
+  </div>
+</Layout>

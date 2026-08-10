@@ -1,0 +1,77 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import quizzes from '../../data/quizzes.json';
+---
+
+<Layout
+  title="Interactive Anime Quizzes — Personality & Trivia"
+  description="Test your anime knowledge or discover your character counterpart. Play our personality and trivia quizzes to see your rank!"
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <!-- Breadcrumb -->
+    <Breadcrumb items={[{ label: 'Quizzes' }]} />
+
+    <div class="text-left mb-8">
+      <h1 class="text-text-primary text-3xl md:text-5xl font-extrabold tracking-tight leading-none mb-3">
+        Anime <span class="gradient-text font-black">Interactive Quizzes</span>
+      </h1>
+      <p class="text-text-secondary text-sm md:text-base max-w-2xl">
+        Select a quiz below to challenge your anime knowledge or discover which legendary character matches your personality traits.
+      </p>
+    </div>
+
+    <!-- Google Ad Slot Top -->
+    <AdSlot slot="quizzes-index-top" format="banner" />
+
+    <!-- Quizzes Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-8">
+      {quizzes.map(quiz => (
+        <div class="card group bg-bg-secondary border border-border-default rounded-2xl overflow-hidden flex flex-col hover:border-accent-pink hover:shadow-card-hover transition-all duration-300">
+          
+          <!-- Cover Banner -->
+          <div class="relative w-full aspect-[2/1] overflow-hidden bg-bg-primary border-b border-border-default">
+            <img
+              src={quiz.image}
+              alt={quiz.title}
+              width="1200"
+              height="600"
+              class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300"
+              loading="lazy"
+            />
+            
+            <!-- Questions Badge Overlay -->
+            <div class="absolute bottom-4 left-4">
+              <span class="badge badge-pink">{quiz.questions.length} Trivia Questions</span>
+            </div>
+          </div>
+
+          <!-- Description and details -->
+          <div class="p-6 flex flex-col flex-grow justify-between">
+            <div class="space-y-3 mb-6">
+              <h2 class="font-heading text-2xl font-bold text-text-primary group-hover:text-accent-pink transition-colors">
+                <a href={`/quiz/${quiz.slug}`}>{quiz.title}</a>
+              </h2>
+              <p class="text-text-secondary text-sm leading-relaxed">
+                {quiz.description}
+              </p>
+            </div>
+
+            <div class="flex items-center justify-between pt-4 border-t border-border-muted mt-auto">
+              <span class="text-xs text-text-tertiary">Type: Interactive Game</span>
+              <a href={`/quiz/${quiz.slug}`} class="btn btn-primary px-4 py-2 text-xs rounded-lg shadow-glow-pink">
+                Start Playing &rarr;
+              </a>
+            </div>
+
+          </div>
+
+        </div>
+      ))}
+    </div>
+
+    <!-- Bottom Ad Slot -->
+    <AdSlot slot="quizzes-index-bottom" format="banner" />
+  </div>
+</Layout>

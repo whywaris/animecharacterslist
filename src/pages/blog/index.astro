@@ -1,0 +1,88 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import blogPosts from '../../data/blog-posts.json';
+
+// Sort blog posts by date descending (newest first)
+const sortedPosts = blogPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+---
+
+<Layout
+  title="Anime Guides, Theories & Articles — Official Blog"
+  description="Read detailed analyses of anime power systems, character breakdowns, theories, and beginner guides. Stay updated with articles from our editorial team."
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <!-- Breadcrumb -->
+    <Breadcrumb items={[{ label: 'Blog' }]} />
+
+    <div class="text-left mb-8">
+      <h1 class="text-text-primary text-3xl md:text-5xl font-extrabold tracking-tight leading-none mb-3">
+        Anime <span class="gradient-text font-black">Editorial Blog</span>
+      </h1>
+      <p class="text-text-secondary text-sm md:text-base max-w-2xl">
+        Guides, theories, character analysis, and industry news written for fans who want to dive deeper into their favorite series.
+      </p>
+    </div>
+
+    <!-- Google Ad Slot Top -->
+    <AdSlot slot="blog-index-top" format="banner" />
+
+    <!-- Grid of Blog Posts -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 my-8">
+      {sortedPosts.map(post => (
+        <div class="card group bg-bg-secondary border border-border-default rounded-2xl overflow-hidden flex flex-col hover:border-accent-blue hover:shadow-card-hover transition-all duration-300">
+          
+          <!-- Post Image -->
+          <div class="relative aspect-video w-full overflow-hidden bg-bg-primary border-b border-border-default">
+            <img
+              src={post.featuredImage}
+              alt={post.title}
+              width="1200"
+              height="600"
+              class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300"
+              loading="lazy"
+            />
+            <!-- Date badge -->
+            <div class="absolute bottom-3 left-3 bg-bg-secondary/90 backdrop-blur-sm border border-border-default rounded px-2 py-0.5 text-[9px] font-bold text-text-secondary">
+              {post.date}
+            </div>
+          </div>
+
+          <!-- Description and metadata -->
+          <div class="p-5 flex flex-col flex-grow justify-between">
+            <div class="space-y-2">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                {post.tags.slice(0, 3).map(tag => (
+                  <span class="text-[9px] font-bold text-accent-blue bg-accent-blue/10 border border-accent-blue/20 rounded px-1.5 py-0.5 uppercase tracking-wider">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+
+              <h2 class="font-heading text-lg font-bold text-text-primary group-hover:text-accent-blue transition-colors line-clamp-2">
+                <a href={`/blog/${post.slug}`}>{post.title}</a>
+              </h2>
+              <p class="text-xs text-text-secondary leading-relaxed line-clamp-3">
+                {post.excerpt}
+              </p>
+            </div>
+
+            <!-- Footer Details -->
+            <div class="pt-4 border-t border-border-muted mt-6 flex items-center justify-between text-[10px] text-text-tertiary">
+              <span class="font-semibold">{post.readingTime} read</span>
+              <a href={`/blog/${post.slug}`} class="text-accent-blue font-bold hover:underline uppercase tracking-wider">
+                Read Article &rarr;
+              </a>
+            </div>
+
+          </div>
+
+        </div>
+      ))}
+    </div>
+
+    <!-- Bottom Ad Slot -->
+    <AdSlot slot="blog-index-bottom" format="banner" />
+  </div>
+</Layout>

@@ -1,0 +1,109 @@
+---
+const navLinks = [
+  { href: '/characters', label: 'Characters' },
+  { href: '/anime', label: 'Anime' },
+  { href: '/list', label: 'Rankings' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/quiz', label: 'Quizzes' },
+  { href: '/comparison', label: 'Compare' }
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="sticky top-0 z-sticky glass border-b border-border-default backdrop-blur-md">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16" x-data="{ mobileMenuOpen: false }">
+      <!-- Logo -->
+      <div class="flex-shrink-0 flex items-center">
+        <a href="/" class="flex items-center gap-2 font-heading font-extrabold text-xl tracking-tight text-text-primary hover:text-accent-blue">
+          <span class="w-8 h-8 rounded-lg bg-gradient-to-tr from-accent-blue to-accent-pink flex items-center justify-center text-white text-base shadow-glow-blue animate-pulse-glow">
+            A
+          </span>
+          <span class="gradient-text font-black">AnimeCharactersList</span>
+        </a>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex space-x-1 items-center">
+        {navLinks.map(link => {
+          const isActive = currentPath.startsWith(link.href);
+          return (
+            <a
+              href={link.href}
+              class={`px-3 py-2 rounded-md font-heading text-sm font-semibold transition-colors duration-150 nav-link-underline ${
+                isActive 
+                  ? 'bg-bg-elevated text-accent-blue' 
+                  : 'text-text-secondary hover:text-text-primary'
+              }`}
+            >
+              {link.label}
+            </a>
+          );
+        })}
+        
+        <div class="pl-4 border-l border-border-default ml-2">
+          <a href="/comparison" class="btn btn-primary px-4 py-1.5 text-xs rounded-full">
+            Compare
+          </a>
+        </div>
+      </nav>
+
+      <!-- Mobile menu button -->
+      <div class="md:hidden flex items-center">
+        <button
+          type="button"
+          class="inline-flex items-center justify-center p-2 rounded-md text-text-secondary hover:text-text-primary hover:bg-bg-elevated focus:outline-none"
+          @click="mobileMenuOpen = !mobileMenuOpen"
+          aria-expanded="false"
+        >
+          <span class="sr-only">Open main menu</span>
+          <!-- Icon when menu is closed -->
+          <svg class="h-6 w-6" x-show="!mobileMenuOpen" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+          <!-- Icon when menu is open -->
+          <svg class="h-6 w-6" x-show="mobileMenuOpen" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" x-cloak>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile Menu Panel -->
+      <div
+        class="absolute top-16 left-0 right-0 w-full glass border-b border-border-default py-4 px-6 md:hidden flex flex-col space-y-2"
+        x-show="mobileMenuOpen"
+        x-transition:enter="transition ease-out duration-150"
+        x-transition:enter-start="opacity-0 transform -translate-y-2"
+        x-transition:enter-end="opacity-100 transform translate-y-0"
+        x-transition:leave="transition ease-in duration-100"
+        x-transition:leave-start="opacity-100 transform translate-y-0"
+        x-transition:leave-end="opacity-0 transform -translate-y-2"
+        @click.away="mobileMenuOpen = false"
+        x-cloak
+      >
+        {navLinks.map(link => {
+          const isActive = currentPath.startsWith(link.href);
+          return (
+            <a
+              href={link.href}
+              class={`px-4 py-3 rounded-lg font-heading font-semibold text-base transition-colors ${
+                isActive 
+                  ? 'bg-bg-elevated text-accent-blue border-l-4 border-accent-blue rounded-l-none' 
+                  : 'text-text-secondary hover:text-text-primary hover:bg-bg-elevated'
+              }`}
+              @click="mobileMenuOpen = false"
+            >
+              {link.label}
+            </a>
+          );
+        })}
+        <div class="pt-4 border-t border-border-default mt-2">
+          <a href="/comparison" class="btn btn-primary w-full py-2.5 rounded-lg text-sm" @click="mobileMenuOpen = false">
+            Compare Characters
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

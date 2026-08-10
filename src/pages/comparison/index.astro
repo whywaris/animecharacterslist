@@ -1,0 +1,338 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import characters from '../../data/characters.json';
+import comparisons from '../../data/comparisons.json';
+
+// Build list of compact character data for client-side selection
+const charactersIndex = characters.map(c => ({
+  slug: c.slug,
+  name: c.name,
+  image: c.image,
+  animeName: c.animeName,
+  // Compute overall average power from abilities
+  power: Math.round((c.abilities || []).reduce((acc, curr) => acc + curr.power, 0) / (c.abilities || []).length) || 80,
+  // Extract or fallback stats
+  speed: c.tags.includes('speed') ? 95 : 85,
+  durability: c.tags.includes('immortal') ? 98 : 82,
+  intelligence: c.tags.includes('strategist') || c.tags.includes('genius') ? 96 : 80,
+  versatility: c.abilities.length > 3 ? 94 : 82
+}));
+
+// Pre-packaged matchups list
+const popularMatchups = comparisons.map(comp => {
+  const c1 = characters.find(c => c.slug === comp.character1);
+  const c2 = characters.find(c => c.slug === comp.character2);
+  return {
+    ...comp,
+    char1Name: c1 ? c1.name : comp.character1,
+    char2Name: c2 ? c2.name : comp.character2,
+    char1Image: c1 ? c1.image : '',
+    char2Image: c2 ? c2.image : ''
+  };
+});
+---
+
+<Layout
+  title="Anime Character Compare Arena — Who Would Win?"
+  description="Compare stats, power bars, and combat matchups of any two anime characters. View head-to-head comparisons of Goku, Naruto, Gojo, Sukuna, and more."
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <!-- Breadcrumb -->
+    <Breadcrumb items={[{ label: 'Compare' }]} />
+
+    <div class="text-left mb-8">
+      <h1 class="text-text-primary text-3xl md:text-5xl font-extrabold tracking-tight leading-none mb-3">
+        Anime Character <span class="gradient-text font-black">Compare Arena</span>
+      </h1>
+      <p class="text-text-secondary text-sm md:text-base max-w-2xl">
+        Select any two characters to launch a head-to-head battle report, analyzing power levels, speed metrics, and combat advantages.
+      </p>
+    </div>
+
+    <!-- Google Ad Slot Top -->
+    <AdSlot slot="compare-index-top" format="banner" />
+
+    <!-- Interactive Matchup Selector -->
+    <div
+      class="card p-6 md:p-10 bg-bg-secondary border border-border-default rounded-2xl mb-8 relative"
+      x-data={`{
+        charIndex: ${JSON.stringify(charactersIndex)},
+        compIndex: ${JSON.stringify(comparisons)},
+        char1Slug: '',
+        char2Slug: '',
+        showResult: false,
+        char1: null,
+        char2: null,
+        predefined: null,
+        winnerName: '',
+        
+        compare() {
+          if (!this.char1Slug || !this.char2Slug) return;
+          if (this.char1Slug === this.char2Slug) {
+            alert("Please select two different characters!");
+            return;
+          }
+          
+          this.char1 = this.charIndex.find(c => c.slug === this.char1Slug);
+          this.char2 = this.charIndex.find(c => c.slug === this.char2Slug);
+          
+          // Check for predefined editorial matchup
+          const compSlug1 = this.char1Slug + '-vs-' + this.char2Slug;
+          const compSlug2 = this.char2Slug + '-vs-' + this.char1Slug;
+          this.predefined = this.compIndex.find(c => c.slug === compSlug1 || c.slug === compSlug2);
+          
+          // Calculate winner
+          if (this.predefined) {
+            const winnerSlug = this.predefined.winner;
+            const wChar = this.charIndex.find(c => c.slug === winnerSlug);
+            this.winnerName = wChar ? wChar.name : 'Tie';
+          } else {
+            // Dynamic stats computation
+            const score1 = this.char1.power + this.char1.speed + this.char1.durability + this.char1.intelligence + this.char1.versatility;
+            const score2 = this.char2.power + this.char2.speed + this.char2.durability + this.char2.intelligence + this.char2.versatility;
+            this.winnerName = score1 > score2 ? this.char1.name : score2 > score1 ? this.char2.name : 'Tie';
+          }
+          
+          this.showResult = true;
+          setTimeout(() => {
+            window.scrollTo({
+              top: this.$refs.arenaResult.offsetTop - 100,
+              behavior: 'smooth'
+            });
+          }, 100);
+        }
+      }`}
+    >
+      <div class="grid grid-cols-1 md:grid-cols-7 gap-6 items-center">
+        <!-- Character 1 Select -->
+        <div class="md:col-span-3 flex flex-col gap-2">
+          <label for="char1-select" class="text-xs font-bold text-text-secondary uppercase tracking-widest">Select Fighter 1</label>
+          <select
+            id="char1-select"
+            x-model="char1Slug"
+            class="w-full bg-bg-primary border border-border-default rounded-xl px-4 py-3 text-sm text-text-primary focus:outline-none focus:border-accent-blue cursor-pointer"
+          >
+            <option value="">Choose a character...</option>
+            <template x-for="c in charIndex" :key="c.slug">
+              <option x-bind:value="c.slug" x-text="c.name + ' (' + c.animeName + ')'"></option>
+            </template>
+          </select>
+        </div>
+
+        <!-- VS Circle -->
+        <div class="md:col-span-1 flex justify-center">
+          <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-accent-blue to-accent-pink flex items-center justify-center font-heading font-black text-sm text-white shadow-glow-blue select-none">
+            VS
+          </div>
+        </div>
+
+        <!-- Character 2 Select -->
+        <div class="md:col-span-3 flex flex-col gap-2">
+          <label for="char2-select" class="text-xs font-bold text-text-secondary uppercase tracking-widest">Select Fighter 2</label>
+          <select
+            id="char2-select"
+            x-model="char2Slug"
+            class="w-full bg-bg-primary border border-border-default rounded-xl px-4 py-3 text-sm text-text-primary focus:outline-none focus:border-accent-blue cursor-pointer"
+          >
+            <option value="">Choose a character...</option>
+            <template x-for="c in charIndex" :key="c.slug">
+              <option x-bind:value="c.slug" x-text="c.name + ' (' + c.animeName + ')'"></option>
+            </template>
+          </select>
+        </div>
+      </div>
+
+      <!-- Action Button -->
+      <div class="text-center mt-8">
+        <button
+          type="button"
+          @click="compare()"
+          class="btn btn-primary px-8 py-3 rounded-xl text-sm font-semibold shadow-glow-blue"
+          x-bind:disabled="!char1Slug || !char2Slug"
+          x-bind:class="(!char1Slug || !char2Slug) ? 'opacity-40 cursor-not-allowed' : ''"
+        >
+          Compare Matchup
+        </button>
+      </div>
+
+      <!-- Compare Result View -->
+      <div
+        x-show="showResult"
+        x-cloak
+        x-ref="arenaResult"
+        class="border-t border-border-default mt-10 pt-10 space-y-8 animate-fade-in"
+      >
+        <!-- Winner Announcement -->
+        <div class="text-center space-y-2">
+          <div class="text-xs font-bold text-accent-pink uppercase tracking-widest">Victory Outcome</div>
+          <h2 class="font-heading text-3xl font-black text-text-primary">
+            Winner: <span class="gradient-text font-black" x-text="winnerName"></span>
+          </h2>
+        </div>
+
+        <!-- Portraits Side-by-Side -->
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-6 items-center">
+          <!-- Fighter 1 Portrait -->
+          <div class="md:col-span-2 flex flex-col items-center gap-2">
+            <div class="w-32 h-48 rounded-xl overflow-hidden bg-bg-primary border border-border-default shadow-md">
+              <img x-bind:src="char1 ? char1.image : ''" alt="" class="w-full h-full object-cover" />
+            </div>
+            <h3 class="font-heading font-bold text-base text-text-primary" x-text="char1 ? char1.name : ''"></h3>
+            <span class="text-xs text-text-secondary" x-text="char1 ? char1.animeName : ''"></span>
+          </div>
+
+          <!-- Central VS -->
+          <div class="col-span-2 md:col-span-1 text-center font-heading font-black text-2xl text-text-tertiary select-none">
+            VS
+          </div>
+
+          <!-- Fighter 2 Portrait -->
+          <div class="md:col-span-2 flex flex-col items-center gap-2">
+            <div class="w-32 h-48 rounded-xl overflow-hidden bg-bg-primary border border-border-default shadow-md">
+              <img x-bind:src="char2 ? char2.image : ''" alt="" class="w-full h-full object-cover" />
+            </div>
+            <h3 class="font-heading font-bold text-base text-text-primary" x-text="char2 ? char2.name : ''"></h3>
+            <span class="text-xs text-text-secondary" x-text="char2 ? char2.animeName : ''"></span>
+          </div>
+        </div>
+
+        <!-- Head-to-Head Stats -->
+        <div class="max-w-2xl mx-auto space-y-5 bg-bg-primary/30 border border-border-muted p-6 rounded-xl">
+          <h3 class="text-center font-heading font-bold text-base text-text-primary border-b border-border-muted pb-3 uppercase tracking-wider">
+            Combat Parameters Comparison
+          </h3>
+
+          <!-- Power Stat -->
+          <div class="space-y-1.5">
+            <div class="flex justify-between text-xs font-semibold">
+              <span x-text="char1 ? char1.power + '%' : ''" class="text-accent-blue font-bold"></span>
+              <span class="text-text-tertiary uppercase tracking-wider">Attack Power</span>
+              <span x-text="char2 ? char2.power + '%' : ''" class="text-accent-pink font-bold"></span>
+            </div>
+            <div class="flex h-2 bg-bg-elevated rounded-full overflow-hidden border border-border-muted">
+              <div class="bg-accent-blue h-full" x-bind:style="{ width: char1 ? char1.power / 2 + '%' : '0%' }"></div>
+              <div class="bg-accent-pink h-full ml-auto" x-bind:style="{ width: char2 ? char2.power / 2 + '%' : '0%' }"></div>
+            </div>
+          </div>
+
+          <!-- Speed Stat -->
+          <div class="space-y-1.5">
+            <div class="flex justify-between text-xs font-semibold">
+              <span x-text="char1 ? char1.speed + '%' : ''" class="text-accent-blue font-bold"></span>
+              <span class="text-text-tertiary uppercase tracking-wider">Movement Speed</span>
+              <span x-text="char2 ? char2.speed + '%' : ''" class="text-accent-pink font-bold"></span>
+            </div>
+            <div class="flex h-2 bg-bg-elevated rounded-full overflow-hidden border border-border-muted">
+              <div class="bg-accent-blue h-full" x-bind:style="{ width: char1 ? char1.speed / 2 + '%' : '0%' }"></div>
+              <div class="bg-accent-pink h-full ml-auto" x-bind:style="{ width: char2 ? char2.speed / 2 + '%' : '0%' }"></div>
+            </div>
+          </div>
+
+          <!-- Durability Stat -->
+          <div class="space-y-1.5">
+            <div class="flex justify-between text-xs font-semibold">
+              <span x-text="char1 ? char1.durability + '%' : ''" class="text-accent-blue font-bold"></span>
+              <span class="text-text-tertiary uppercase tracking-wider">Durability & Armor</span>
+              <span x-text="char2 ? char2.durability + '%' : ''" class="text-accent-pink font-bold"></span>
+            </div>
+            <div class="flex h-2 bg-bg-elevated rounded-full overflow-hidden border border-border-muted">
+              <div class="bg-accent-blue h-full" x-bind:style="{ width: char1 ? char1.durability / 2 + '%' : '0%' }"></div>
+              <div class="bg-accent-pink h-full ml-auto" x-bind:style="{ width: char2 ? char2.durability / 2 + '%' : '0%' }"></div>
+            </div>
+          </div>
+
+          <!-- Intelligence Stat -->
+          <div class="space-y-1.5">
+            <div class="flex justify-between text-xs font-semibold">
+              <span x-text="char1 ? char1.intelligence + '%' : ''" class="text-accent-blue font-bold"></span>
+              <span class="text-text-tertiary uppercase tracking-wider">Tactical IQ</span>
+              <span x-text="char2 ? char2.intelligence + '%' : ''" class="text-accent-pink font-bold"></span>
+            </div>
+            <div class="flex h-2 bg-bg-elevated rounded-full overflow-hidden border border-border-muted">
+              <div class="bg-accent-blue h-full" x-bind:style="{ width: char1 ? char1.intelligence / 2 + '%' : '0%' }"></div>
+              <div class="bg-accent-pink h-full ml-auto" x-bind:style="{ width: char2 ? char2.intelligence / 2 + '%' : '0%' }"></div>
+            </div>
+          </div>
+
+          <!-- Versatility Stat -->
+          <div class="space-y-1.5">
+            <div class="flex justify-between text-xs font-semibold">
+              <span x-text="char1 ? char1.versatility + '%' : ''" class="text-accent-blue font-bold"></span>
+              <span class="text-text-tertiary uppercase tracking-wider">Combat Versatility</span>
+              <span x-text="char2 ? char2.versatility + '%' : ''" class="text-accent-pink font-bold"></span>
+            </div>
+            <div class="flex h-2 bg-bg-elevated rounded-full overflow-hidden border border-border-muted">
+              <div class="bg-accent-blue h-full" x-bind:style="{ width: char1 ? char1.versatility / 2 + '%' : '0%' }"></div>
+              <div class="bg-accent-pink h-full ml-auto" x-bind:style="{ width: char2 ? char2.versatility / 2 + '%' : '0%' }"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Predefined Analysis (if exists) -->
+        <template x-if="predefined">
+          <div class="max-w-2xl mx-auto space-y-3 pt-4">
+            <h3 class="font-heading font-bold text-lg text-text-primary border-b border-border-default pb-2">
+              Editorial Combat Report
+            </h3>
+            <p class="text-text-secondary text-sm leading-relaxed" x-text="predefined.analysis"></p>
+          </div>
+        </template>
+        
+        <!-- Custom calculated description (fallback) -->
+        <template x-if="!predefined">
+          <div class="max-w-2xl mx-auto space-y-3 pt-4 text-center">
+            <p class="text-text-secondary text-sm leading-relaxed">
+              Based on overall metrics, <strong class="text-text-primary" x-text="winnerName"></strong> holds a strategic combat advantage in this custom matchup. Power levels are dynamically compiled from their respective training and abilities indexes.
+            </p>
+          </div>
+        </template>
+      </div>
+
+    </div>
+
+    <!-- Predefined Popular Matchups Section -->
+    <section class="my-16 space-y-6">
+      <div>
+        <h2 class="section-title">Popular Matchups</h2>
+        <p class="text-text-secondary text-sm">Read definitive combat analysis on highly requested matchups</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {popularMatchups.map(match => (
+          <div class="card p-5 bg-bg-secondary hover:border-accent-blue hover:shadow-card-hover transition-all duration-300 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-center gap-3 py-4 select-none">
+                <div class="w-12 h-12 rounded-full overflow-hidden border border-border-default flex-shrink-0 bg-bg-primary">
+                  <img src={match.char1Image} alt="" class="w-full h-full object-cover" />
+                </div>
+                <span class="font-heading font-black text-xs text-text-tertiary">VS</span>
+                <div class="w-12 h-12 rounded-full overflow-hidden border border-border-default flex-shrink-0 bg-bg-primary">
+                  <img src={match.char2Image} alt="" class="w-full h-full object-cover" />
+                </div>
+              </div>
+              
+              <h3 class="font-heading font-bold text-base text-text-primary text-center hover:text-accent-blue mt-2 mb-3">
+                <a href={`/comparison/${match.slug}`}>{match.title}</a>
+              </h3>
+              <p class="text-xs text-text-secondary text-center line-clamp-3 mb-4">
+                {match.description}
+              </p>
+            </div>
+
+            <div class="pt-4 border-t border-border-muted flex items-center justify-between mt-auto">
+              <span class="text-[10px] font-bold uppercase text-accent-pink tracking-wider">Winner: {match.winner.replace('-', ' ')}</span>
+              <a href={`/comparison/${match.slug}`} class="text-xs text-accent-blue font-bold hover:underline">
+                Read Report &rarr;
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Bottom Ad Slot -->
+    <AdSlot slot="compare-index-bottom" format="banner" />
+  </div>
+</Layout>

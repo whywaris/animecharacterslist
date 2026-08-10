@@ -1,0 +1,90 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import AdSlot from '../components/AdSlot.astro';
+---
+
+<Layout
+  title="About Us — AnimeCharactersList"
+  description="Learn about our mission to build the internet's most comprehensive and structured directory of anime character statistics, power level indexes, and matchups."
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <!-- Breadcrumb -->
+    <Breadcrumb items={[{ label: 'About' }]} />
+
+    <div class="text-left mb-8">
+      <h1 class="text-text-primary text-3xl md:text-5xl font-extrabold tracking-tight leading-none mb-3">
+        About <span class="gradient-text font-black">AnimeCharactersList.com</span>
+      </h1>
+      <p class="text-text-secondary text-sm md:text-base max-w-2xl">
+        Building the ultimate repository for anime character metrics, abilities, and matchups.
+      </p>
+    </div>
+
+    <!-- Ad Slot Top -->
+    <AdSlot slot="about-top" format="banner" />
+
+    <!-- About Content -->
+    <div class="card p-6 md:p-8 bg-bg-secondary border border-border-default rounded-2xl space-y-6">
+      
+      <div class="space-y-4">
+        <h2 class="text-h3 font-bold text-text-primary">Our Mission</h2>
+        <p class="text-text-secondary text-sm md:text-base leading-relaxed">
+          AnimeCharactersList.com was created by a group of passionate anime fans who wanted a structured, search-engine-friendly, and highly interactive database of character statistics. We realized that while there are wikis and forums, there wasn't a clean, premium tool to compare character power metrics side-by-side or study transformation progressions in a unified, modern interface.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 py-6 border-y border-border-muted my-6 text-center">
+        <div>
+          <span class="block text-[10px] text-text-tertiary uppercase font-bold tracking-widest">Characters</span>
+          <span class="text-2xl font-heading font-black text-accent-blue">100+</span>
+        </div>
+        <div>
+          <span class="block text-[10px] text-text-tertiary uppercase font-bold tracking-widest">Franchises</span>
+          <span class="text-2xl font-heading font-black text-accent-orange">10</span>
+        </div>
+        <div>
+          <span class="block text-[10px] text-text-tertiary uppercase font-bold tracking-widest">Articles</span>
+          <span class="text-2xl font-heading font-black text-accent-purple">30</span>
+        </div>
+        <div>
+          <span class="block text-[10px] text-text-tertiary uppercase font-bold tracking-widest">Daily Users</span>
+          <span class="text-2xl font-heading font-black text-accent-pink">Growing</span>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <h2 class="text-h3 font-bold text-text-primary">Key Features</h2>
+        <ul class="space-y-2 text-sm text-text-secondary">
+          <li class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-accent-blue flex-shrink-0"></span>
+            <strong>Dynamic Comparisons:</strong> Choose any two characters to calculate head-to-head combat indexes.
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-accent-pink flex-shrink-0"></span>
+            <strong>Interactive Quizzes:</strong> Find your anime counterpart using personality weighting.
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-accent-purple flex-shrink-0"></span>
+            <strong>Power Timelines:</strong> Track visual transformations and abilities ratings.
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-accent-green flex-shrink-0"></span>
+            <strong>Structured Search:</strong> Find characters by series, role, or traits using filter panels.
+          </li>
+        </ul>
+      </div>
+
+      <div class="space-y-4 pt-6 border-t border-border-muted">
+        <h2 class="text-h3 font-bold text-text-primary">Get in Touch</h2>
+        <p class="text-text-secondary text-sm md:text-base leading-relaxed">
+          Have feedback or suggestions for new characters or lists? We'd love to hear from you. Visit our <a href="/contact" class="text-accent-blue hover:underline font-bold">Contact Page</a> to send us a message.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Ad Slot Bottom -->
+    <AdSlot slot="about-bottom" format="banner" />
+  </div>
+</Layout>

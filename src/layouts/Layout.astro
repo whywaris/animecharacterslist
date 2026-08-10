@@ -1,0 +1,35 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  type?: 'website' | 'article' | 'profile';
+  canonicalUrl?: string;
+  schemaType?: 'WebSite' | 'Person' | 'Article' | 'CollectionPage';
+  schemaData?: any;
+}
+
+const { title, description, image, type, canonicalUrl, schemaType, schemaData } = Astro.props;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  image={image}
+  type={type}
+  canonicalUrl={canonicalUrl}
+  schemaType={schemaType}
+  schemaData={schemaData}
+>
+  <div class="flex flex-col min-h-screen">
+    <Navbar />
+    <main class="flex-grow">
+      <slot />
+    </main>
+    <Footer />
+  </div>
+</BaseLayout>

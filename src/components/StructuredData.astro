@@ -1,0 +1,80 @@
+---
+interface Props {
+  type?: 'WebSite' | 'Person' | 'Article' | 'CollectionPage' | 'ItemList';
+  data?: any;
+}
+
+const { type, data } = Astro.props;
+
+let jsonLd: any = null;
+
+if (type === 'WebSite') {
+  jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    'name': 'AnimeCharactersList',
+    'url': 'https://animecharacterslist.com',
+    'description': 'A comprehensive directory of anime characters with detailed stats, rankings, and information.',
+    'potentialAction': {
+      '@type': 'SearchAction',
+      'target': 'https://animecharacterslist.com/characters?search={search_term_string}',
+      'query-input': 'required name=search_term_string'
+    }
+  };
+} else if (type === 'Person' && data) {
+  jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    'name': data.name,
+    'alternateName': data.japaneseName,
+    'description': data.description,
+    'image': data.image,
+    'gender': data.gender,
+    'height': data.height,
+    'weight': data.weight,
+    'birthDate': data.birthday,
+    'jobTitle': data.role,
+    'knowsAbout': [data.animeName, 'Anime', 'Manga']
+  };
+} else if (type === 'Article' && data) {
+  jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'NewsArticle',
+    'headline': data.title,
+    'description': data.excerpt,
+    'image': [data.featuredImage],
+    'datePublished': `${data.date}T00:00:00Z`,
+    'dateModified': `${data.date}T00:00:00Z`,
+    'author': [{
+      '@type': 'Organization',
+      'name': 'AnimeCharactersList Team',
+      'url': 'https://animecharacterslist.com'
+    }],
+    'publisher': {
+      '@type': 'Organization',
+      'name': 'AnimeCharactersList',
+      'logo': {
+        '@type': 'ImageObject',
+        'url': 'https://animecharacterslist.com/favicon.svg'
+      }
+    }
+  };
+} else if (type === 'ItemList' && data) {
+  jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    'name': data.title,
+    'description': data.description,
+    'itemListElement': data.entries.map((entry: any, index: number) => ({
+      '@type': 'ListItem',
+      'position': index + 1,
+      'name': entry.name || entry.characterSlug,
+      'url': `https://animecharacterslist.com/character/${entry.characterSlug}`
+    }))
+  };
+}
+---
+
+{jsonLd && (
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+)}

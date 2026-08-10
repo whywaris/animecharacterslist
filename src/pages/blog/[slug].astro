@@ -1,0 +1,132 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import SocialShare from '../../components/SocialShare.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import blogPosts from '../../data/blog-posts.json';
+
+export async function getStaticPaths() {
+  return blogPosts.map(item => ({
+    params: { slug: item.slug },
+    props: { post: item }
+  }));
+}
+
+const { post } = Astro.props;
+
+// Simple, robust build-time markdown parser for JSON content
+const renderMarkdown = (text: string) => {
+  let html = text;
+  
+  // Replace Headings
+  html = html.replace(/^### (.*$)/gim, '<h3 class="text-h4 font-bold text-text-primary mt-6 mb-3">$1</h3>');
+  html = html.replace(/^## (.*$)/gim, '<h2 class="text-h3 font-bold text-text-primary mt-8 mb-4 border-b border-border-default pb-2">$1</h2>');
+  html = html.replace(/^# (.*$)/gim, '<h1 class="text-h2 font-black text-text-primary mt-10 mb-6">$1</h1>');
+  
+  // Replace Bold
+  html = html.replace(/\*\*(.*?)\*\*/g, '<strong class="text-text-primary font-bold">$1</strong>');
+  
+  // Replace Bullet Lists (grouping them in a list block)
+  html = html.replace(/^\- (.*$)/gim, '<li class="ml-6 list-disc text-text-secondary pl-1 mb-1.5">$1</li>');
+  
+  // Replace numbered lists
+  html = html.replace(/^\d+\.\s(.*$)/gim, '<li class="ml-6 list-decimal text-text-secondary pl-1 mb-1.5">$1</li>');
+
+  // Parse paragraphs
+  const paragraphs = html.split('\n\n');
+  const parsedParagraphs = paragraphs.map(p => {
+    const trimmed = p.trim();
+    if (!trimmed) return '';
+    // Skip wrapping if it's already a heading or list element
+    if (trimmed.startsWith('<h') || trimmed.startsWith('<li') || trimmed.startsWith('<ul') || trimmed.startsWith('<ol')) {
+      return trimmed;
+    }
+    return `<p class="mb-4 text-text-secondary text-sm md:text-base leading-relaxed">${trimmed}</p>`;
+  });
+  
+  return parsedParagraphs.join('\n');
+};
+
+const htmlContent = renderMarkdown(post.content);
+---
+
+<Layout
+  title={post.title}
+  description={post.excerpt}
+  image={post.featuredImage}
+  type="article"
+  schemaType="Article"
+  schemaData={post}
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <!-- Breadcrumbs -->
+    <Breadcrumb
+      items={[
+        { label: 'Blog', href: '/blog' },
+        { label: post.title }
+      ]}
+    />
+
+    <!-- Google Ad Slot Top -->
+    <AdSlot slot="blog-detail-top" format="banner" />
+
+    <!-- Article Content -->
+    <article class="card p-6 md:p-10 bg-bg-secondary border border-border-default rounded-2xl mb-8">
+      
+      <!-- Article Header -->
+      <header class="space-y-4 mb-8">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="badge badge-blue">{post.date}</span>
+          <span class="badge badge-pink">{post.readingTime} Read</span>
+        </div>
+        
+        <h1 class="font-heading text-3xl md:text-5xl font-black text-text-primary leading-tight">
+          {post.title}
+        </h1>
+
+        <div class="flex items-center gap-2 text-xs text-text-secondary pt-2">
+          <span>By</span>
+          <span class="font-bold text-text-primary">{post.author}</span>
+          <span>•</span>
+          <span>Official Editorial Team</span>
+        </div>
+      </header>
+
+      <!-- Featured Image -->
+      <div class="aspect-[2/1] w-full rounded-xl overflow-hidden bg-bg-primary border border-border-default mb-8">
+        <img
+          src={post.featuredImage}
+          alt={post.title}
+          width="1200"
+          height="600"
+          class="w-full h-full object-cover"
+          loading="eager"
+        />
+      </div>
+
+      <!-- Article Body -->
+      <div class="article-body prose prose-invert max-w-none mb-8" set:html={htmlContent}></div>
+
+      <!-- Mid-article Ad Slot -->
+      <AdSlot slot="blog-detail-mid" format="auto" />
+
+      <!-- Tags list -->
+      <div class="flex flex-wrap gap-2 pt-6 border-t border-border-muted mb-6">
+        {post.tags.map(tag => (
+          <span class="text-xs font-semibold bg-bg-elevated px-3 py-1 rounded-full text-text-secondary uppercase tracking-wider">
+            #{tag}
+          </span>
+        ))}
+      </div>
+
+      <!-- Social Share -->
+      <div class="pt-4">
+        <SocialShare title={post.title} description={post.excerpt} />
+      </div>
+
+    </article>
+
+    <!-- Google Ad Slot Bottom -->
+    <AdSlot slot="blog-detail-bottom" format="banner" />
+  </div>
+</Layout>

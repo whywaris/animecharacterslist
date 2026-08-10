@@ -1,0 +1,84 @@
+---
+import '../styles/global.css';
+import StructuredData from '../components/StructuredData.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  type?: 'website' | 'article' | 'profile';
+  canonicalUrl?: string;
+  schemaType?: 'WebSite' | 'Person' | 'Article' | 'CollectionPage';
+  schemaData?: any;
+}
+
+const {
+  title,
+  description,
+  image = 'https://placehold.co/1200x630/161B22/58A6FF?text=AnimeCharactersList.com',
+  type = 'website',
+  canonicalUrl,
+  schemaType,
+  schemaData
+} = Astro.props;
+
+const siteUrl = 'https://animecharacterslist.com';
+const currentUrl = canonicalUrl || `${siteUrl}${Astro.url.pathname}`;
+const formattedTitle = title.includes('AnimeCharactersList') ? title : `${title} | AnimeCharactersList`;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    
+    <!-- Primary Meta Tags -->
+    <title>{formattedTitle}</title>
+    <meta name="title" content={formattedTitle} />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={currentUrl} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={currentUrl} />
+    <meta property="og:title" content={formattedTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={currentUrl} />
+    <meta property="twitter:title" content={formattedTitle} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={image} />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Sitemap -->
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <!-- Structured Data -->
+    <StructuredData type={schemaType} data={schemaData} />
+
+    <!-- Google AdSense Placeholder Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-placeholder" crossorigin="anonymous"></script>
+  </head>
+  <body class="relative min-h-screen">
+    <!-- Atmospheric Background Particles -->
+    <div class="particles-container" aria-hidden="true">
+      <div class="particle p1"></div>
+      <div class="particle p2"></div>
+      <div class="particle p3"></div>
+    </div>
+
+    <!-- Relative wrapper to render slot content on top of absolute particles -->
+    <div class="relative z-10">
+      <slot />
+    </div>
+  </body>
+</html>
