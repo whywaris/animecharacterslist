@@ -1,0 +1,27 @@
+---
+// Renders nothing at all when disabled — no empty space, no layout shift.
+// Admin panel writes to settings.json -> rebuild -> bar appears/disappears.
+import settings from '../data/settings.json';
+
+const { enabled, text, linkText, linkHref, style } = settings.announcementBar;
+
+// Map style keyword to a Tailwind class combo — keeps this component
+// self-contained without needing new global CSS.
+const styleMap: Record<string, string> = {
+  info: 'bg-accent-blue/10 border-accent-blue/30 text-accent-blue',
+  promo: 'bg-accent-pink/10 border-accent-pink/30 text-accent-pink',
+  warning: 'bg-yellow-500/10 border-yellow-500/30 text-yellow-500',
+};
+const styleClass = styleMap[style] || styleMap.info;
+---
+
+{enabled && (
+  <div class={`w-full border-b px-4 py-2.5 text-center text-sm font-medium ${styleClass}`}>
+    <span>{text}</span>
+    {linkText && linkHref && (
+      <a href={linkHref} class="ml-2 underline underline-offset-2 hover:opacity-80 transition-opacity">
+        {linkText} →
+      </a>
+    )}
+  </div>
+)}
